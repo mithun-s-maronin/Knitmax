@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Knitmax Exports — Premium Knitwear Manufacturing</title>
+<meta name="description" content="Knitmax Exports — premium knitwear and textile manufacturing, from yarn to finished garment.">
+<meta name="theme-color" content="#E84912">
+<link rel="preload" href="fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/knitmax.css">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============================================================
+     GLOBAL SVG DEFS — textile art system
+     Weave patterns, knit-loop tiles, gradients, thread strokes.
+     ============================================================ -->
+<svg class="svg-defs" aria-hidden="true" focusable="false">
+  <defs>
+
+    <!-- Knit stitch tile: the interlocking "V" loop of a jersey knit -->
+    <pattern id="knitLoop" width="26" height="30" patternUnits="userSpaceOnUse">
+      <path d="M0 30 L13 12 L26 30 M13 12 L13 0" fill="none"
+            stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M-13 30 L0 12 L13 30 M26 30 L39 12 L52 30" fill="none"
+            stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </pattern>
+
+    <!-- Plain weave: warp over weft -->
+    <pattern id="plainWeave" width="16" height="16" patternUnits="userSpaceOnUse">
+      <path d="M0 4 H16 M0 12 H16" fill="none" stroke="currentColor" stroke-width="1.1"/>
+      <path d="M4 0 V16 M12 0 V16" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".55"/>
+    </pattern>
+
+    <!-- Rib knit: vertical wales -->
+    <pattern id="ribKnit" width="14" height="14" patternUnits="userSpaceOnUse">
+      <path d="M3 0 V14 M11 0 V14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </pattern>
+
+    <!-- Scaled knit/rib tiles (avoids scale() transforms that overflow the viewBox) -->
+    <pattern id="knitL" width="49" height="57" patternUnits="userSpaceOnUse">
+      <path d="M0 57 L24.5 23 L49 57 M24.5 23 L24.5 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M-24.5 57 L0 23 L24.5 57 M49 57 L73.5 23 L98 57" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </pattern>
+    <pattern id="knitXL" width="62" height="72" patternUnits="userSpaceOnUse">
+      <path d="M0 72 L31 29 L62 72 M31 29 L31 0" fill="none" stroke="currentColor" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M-31 72 L0 29 L31 72 M62 72 L93 29 L124 72" fill="none" stroke="currentColor" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </pattern>
+    <pattern id="ribXL" width="39" height="39" patternUnits="userSpaceOnUse">
+      <path d="M8 0 V39 M30 0 V39" fill="none" stroke="currentColor" stroke-width="5.6" stroke-linecap="round"/>
+    </pattern>
+
+    <!-- Fabric fold gradients -->
+    <linearGradient id="foldLight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#FFAA83"/>
+      <stop offset="45%"  stop-color="#FF7954"/>
+      <stop offset="100%" stop-color="#F45A1D"/>
+    </linearGradient>
+    <linearGradient id="foldDark" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#F45A1D"/>
+      <stop offset="55%"  stop-color="#E84912"/>
+      <stop offset="100%" stop-color="#B8350B"/>
+    </linearGradient>
+    <linearGradient id="foldCream" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#FFF5EB"/>
+      <stop offset="50%"  stop-color="#FFE2CC"/>
+      <stop offset="100%" stop-color="#FFAA83"/>
+    </linearGradient>
+    <linearGradient id="foldEspresso" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#3A2620"/>
+      <stop offset="55%"  stop-color="#1D120E"/>
+      <stop offset="100%" stop-color="#120A07"/>
+    </linearGradient>
+
+    <!-- Sheen sweep across the drape -->
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity=".38"/>
+      <stop offset="38%"  stop-color="#FFFFFF" stop-opacity=".06"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity=".14"/>
+    </linearGradient>
+
+    <!-- Soft warm field for light product cloths -->
+    <linearGradient id="warmField" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#FFF7EF" stop-opacity=".9"/>
+      <stop offset="45%"  stop-color="#FFCFAF" stop-opacity=".5"/>
+      <stop offset="100%" stop-color="#E88C5C" stop-opacity=".55"/>
+    </linearGradient>
+
+    <!-- Warm illumination behind product forms -->
+    <radialGradient id="glowWarm" cx="50%" cy="42%" r="58%">
+      <stop offset="0%"   stop-color="#FFC9A8" stop-opacity=".85"/>
+      <stop offset="55%"  stop-color="#FF7954" stop-opacity=".25"/>
+      <stop offset="100%" stop-color="#E84912" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowCream" cx="50%" cy="45%" r="60%">
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity=".9"/>
+      <stop offset="60%"  stop-color="#FFAA83" stop-opacity=".22"/>
+      <stop offset="100%" stop-color="#FFAA83" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Grounded contact shadow -->
+    <radialGradient id="groundShadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#5A1E06" stop-opacity=".55"/>
+      <stop offset="65%"  stop-color="#5A1E06" stop-opacity=".14"/>
+      <stop offset="100%" stop-color="#5A1E06" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Hero cloth: soft continuous fold shading (no hard band edges) -->
+    <linearGradient id="drapeFolds" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#D9855C"/>
+      <stop offset="9%"   stop-color="#FFC6A3"/>
+      <stop offset="19%"  stop-color="#FFF3E6"/>
+      <stop offset="29%"  stop-color="#FFD6B8"/>
+      <stop offset="39%"  stop-color="#E5926A"/>
+      <stop offset="50%"  stop-color="#FFCEAC"/>
+      <stop offset="61%"  stop-color="#FFF5EB"/>
+      <stop offset="71%"  stop-color="#FFD1AF"/>
+      <stop offset="82%"  stop-color="#DF8C63"/>
+      <stop offset="92%"  stop-color="#FFC8A6"/>
+      <stop offset="100%" stop-color="#CE7C55"/>
+    </linearGradient>
+
+    <!-- Vertical light falloff down the hanging cloth -->
+    <linearGradient id="dropShade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#8A4520" stop-opacity=".22"/>
+      <stop offset="16%"  stop-color="#FFFFFF" stop-opacity=".10"/>
+      <stop offset="52%"  stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="82%"  stop-color="#8E3F14" stop-opacity=".14"/>
+      <stop offset="100%" stop-color="#6E2A08" stop-opacity=".34"/>
+    </linearGradient>
+
+    <!-- Larger knit tile, legible at hero scale -->
+    <pattern id="knitHero" width="19" height="22" patternUnits="userSpaceOnUse">
+      <path d="M0 22 L9.5 8.5 L19 22 M9.5 8.5 L9.5 0" fill="none"
+            stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M-9.5 22 L0 8.5 L9.5 22 M19 22 L28.5 8.5 L38 22" fill="none"
+            stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
+    </pattern>
+
+    <!-- Hero drape silhouette (uneven hanging hem) -->
+    <clipPath id="drapeClip">
+      <path d="M56 156
+               C 62 120, 94 96, 130 102   C 170 109, 198 122, 234 115
+               C 274 107, 302 88, 342 97  C 384 106, 412 124, 454 114
+               C 496 104, 524 84, 568 99  C 604 111, 634 128, 652 168
+               C 664 232, 668 336, 666 538  C 665 618, 664 664, 662 702
+               C 642 702, 622 764, 602 764  C 582 764, 562 714, 542 714
+               C 522 714, 502 788, 482 788  C 462 788, 442 728, 422 728
+               C 402 728, 382 798, 362 798  C 342 798, 322 736, 302 736
+               C 282 736, 262 780, 242 780  C 222 780, 202 722, 182 722
+               C 162 722, 142 770, 122 770  C 102 770, 82 706, 60 704
+               C 54 534, 52 330, 56 156 Z"/>
+    </clipPath>
+
+  </defs>
+</svg>
+
+
+<!-- ============================================================ NAV ============================================================ -->
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#home" aria-label="Knitmax Exports — home">
+    <svg class="nav__mark" viewBox="0 0 32 32" aria-hidden="true">
+      <g fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 27 L11 15 L18 27"/>
+        <path d="M14 27 L21 15 L28 27"/>
+        <path d="M11 15 V5"/><path d="M21 15 V5"/>
+      </g>
+    </svg>
+    <span class="nav__word">Knitmax<em>Exports</em></span>
+  </a>
+
+  <nav class="nav__pill" aria-label="Primary">
+    <a href="#about">About</a>
+    <a href="#products">Products</a>
+    <a href="#process">Process</a>
+    <a href="#quality">Quality</a>
+    <a href="#gallery">Gallery</a>
+  </nav>
+
+  <a class="nav__cta" href="#contact">
+    <span>Enquire</span>
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+
+  <button class="nav__burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+    <span></span><span></span>
+  </button>
+</header>
+
+<div class="menu" id="mobileMenu" hidden>
+  <a href="#about">About</a>
+  <a href="#products">Products</a>
+  <a href="#process">Process</a>
+  <a href="#quality">Quality</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#contact">Contact</a>
+</div>
+
+
+<main class="stack">
+
+<!-- ============================================================ HERO ============================================================ -->
+<section class="panel panel--hero" id="home" data-panel data-theme="coral" data-nav="dark">
+  <div class="panel__inner hero">
+
+    <div class="hero__frame">
+      <!-- thread-line decoration -->
+      <svg class="hero__threads" viewBox="0 0 1200 800" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M-40 640 C 240 560, 380 700, 640 600 S 1040 470, 1260 540" fill="none" stroke="#FFAA83" stroke-opacity=".28" stroke-width="1.2"/>
+        <path d="M-40 690 C 260 620, 400 750, 660 655 S 1060 530, 1260 596" fill="none" stroke="#FFAA83" stroke-opacity=".18" stroke-width="1.2"/>
+        <path d="M-40 168 C 300 110, 520 210, 820 140 S 1120 70, 1260 118" fill="none" stroke="#FFAA83" stroke-opacity=".14" stroke-width="1.2"/>
+      </svg>
+
+      <p class="hero__eyebrow reveal-line"><span>Knitwear manufacturing &amp; export</span></p>
+
+      <h1 class="hero__title">
+        <span class="rl"><span>Premium</span></span>
+        <span class="rl"><span>Knitwear</span></span>
+        <span class="rl"><span><em>for the world.</em></span></span>
+      </h1>
+
+      <!-- ---------- HERO PRODUCT VISUAL: draped knitted fabric ---------- -->
+      <div class="hero__visual" data-tilt>
+       <div class="hero__cloth">
+        <svg class="drape" viewBox="0 0 720 900" role="img" aria-label="Draped knitted fabric">
+          <ellipse cx="360" cy="452" rx="330" ry="330" fill="url(#glowWarm)"/>
+
+          <g clip-path="url(#drapeClip)">
+            <rect x="0" y="0" width="720" height="900" fill="url(#drapeFolds)"/>
+            <!-- jersey structure, felt more than seen -->
+            <rect x="0" y="0" width="720" height="900" fill="url(#knitHero)" color="#B46238" opacity=".19"/>
+            <rect x="0" y="0" width="720" height="900" fill="url(#knitHero)" color="#FFFFFF" opacity=".26" transform="translate(0,-1.3)"/>
+            <rect x="0" y="0" width="720" height="900" fill="url(#dropShade)"/>
+            <rect x="0" y="0" width="720" height="900" fill="url(#sheen)" opacity=".28"/>
+          </g>
+
+          <!-- gathers where the cloth is held -->
+          <g stroke="#A65B32" stroke-opacity=".24" stroke-width="2" fill="none" stroke-linecap="round">
+            <path d="M130 106 C 128 142, 132 172, 130 202"/>
+            <path d="M234 119 C 232 155, 236 185, 234 215"/>
+            <path d="M342 101 C 340 137, 344 167, 342 197"/>
+            <path d="M454 118 C 452 154, 456 184, 454 214"/>
+            <path d="M568 103 C 566 139, 570 169, 568 199"/>
+          </g>
+          <!-- grounded contact shadow -->
+          <ellipse cx="362" cy="818" rx="276" ry="26" fill="url(#groundShadow)"/>
+        </svg>
+
+        <!-- floating information chips, anchored to the cloth -->
+        <div class="chip chip--a">
+          <span class="chip__dot"></span>
+          <span>Yarn to finished garment</span>
+        </div>
+        <div class="chip chip--b">
+          <span class="chip__k">TODO_CAPACITY</span>
+          <span>Annual capacity</span>
+        </div>
+       </div>
+      </div>
+
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="#products">
+          <span>View our products</span>
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="btn btn--ghost" href="#contact"><span>Request a quote</span></a>
+      </div>
+
+      <div class="hero__meta">
+        <span class="hero__metaLabel">Based in</span>
+        <span class="hero__metaValue">TODO_CITY, TODO_COUNTRY</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ ABOUT ============================================================ -->
+<section class="panel panel--about" id="about" data-panel data-theme="cream">
+  <div class="panel__inner about">
+
+    <figure class="about__figure" data-parallax="26">
+      <div class="mask">
+        <svg preserveAspectRatio="xMidYMid slice" class="cloth cloth--tall" viewBox="0 0 460 780" role="img" aria-label="Column of folded knitted fabric">
+          <defs>
+            <linearGradient id="columnFolds" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stop-color="#C33B0B"/>
+              <stop offset="9%"   stop-color="#F1571B"/>
+              <stop offset="18%"  stop-color="#FF8B5F"/>
+              <stop offset="27%"  stop-color="#E94A12"/>
+              <stop offset="37%"  stop-color="#BC380A"/>
+              <stop offset="47%"  stop-color="#F2591C"/>
+              <stop offset="57%"  stop-color="#FF9670"/>
+              <stop offset="67%"  stop-color="#EA4E13"/>
+              <stop offset="78%"  stop-color="#BE390B"/>
+              <stop offset="89%"  stop-color="#EE5418"/>
+              <stop offset="100%" stop-color="#A93109"/>
+            </linearGradient>
+          </defs>
+          <rect width="460" height="780" fill="url(#columnFolds)"/>
+          <g fill="none" stroke="#FFD9C2" stroke-opacity=".2" stroke-width="2.5">
+            <path d="M0 162 C 60 140, 110 182, 190 156 C 300 120, 350 186, 460 150"/>
+            <path d="M0 320 C 60 298, 110 340, 190 314 C 300 278, 350 344, 460 308"/>
+            <path d="M0 478 C 60 456, 110 498, 190 472 C 300 436, 350 502, 460 466"/>
+            <path d="M0 636 C 60 614, 110 656, 190 630 C 300 594, 350 660, 460 624"/>
+          </g>
+          <g fill="none" stroke="#7A2705" stroke-opacity=".18" stroke-width="4">
+            <path d="M0 168 C 60 146, 110 188, 190 162 C 300 126, 350 192, 460 156"/>
+            <path d="M0 326 C 60 304, 110 346, 190 320 C 300 284, 350 350, 460 314"/>
+            <path d="M0 484 C 60 462, 110 504, 190 478 C 300 442, 350 508, 460 472"/>
+            <path d="M0 642 C 60 620, 110 662, 190 636 C 300 600, 350 666, 460 630"/>
+          </g>
+          <rect width="460" height="780" fill="url(#knitLoop)" color="#FFD9C2" opacity=".15"/>
+          <rect width="460" height="780" fill="url(#sheen)" opacity=".6"/>
+        </svg>
+      </div>
+    </figure>
+
+    <div class="about__body">
+      <p class="label reveal-line"><span>01 — About Knitmax</span></p>
+
+      <h2 class="h-display">
+        <span class="rl"><span>We make cloth</span></span>
+        <span class="rl"><span>that travels</span></span>
+        <span class="rl"><span><em>well.</em></span></span>
+      </h2>
+
+      <div class="about__cols">
+        <p class="lede">Knitmax Exports is a knitwear manufacturer working across the full production chain — yarn selection, knitting, dyeing, cutting, stitching and finishing — under one accountable roof.</p>
+        <p class="body-sm">TODO_ABOUT_PARAGRAPH — replace with the real company story: founding year, ownership, mills and units, markets served, and the specific capabilities you want to lead with.</p>
+      </div>
+
+      <dl class="about__facts">
+        <div><dt>Established</dt><dd>TODO_YEAR</dd></div>
+        <div><dt>Units</dt><dd>TODO_FACILITIES</dd></div>
+        <div><dt>Markets</dt><dd>TODO_MARKETS</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ PRODUCTS ============================================================ -->
+<section class="panel panel--product" id="products" data-panel data-theme="orange">
+  <div class="panel__inner lookbook">
+    <div class="lookbook__visual">
+      <div class="mask">
+        <svg preserveAspectRatio="xMidYMid slice" class="cloth" viewBox="0 0 900 700" role="img" aria-label="Macro view of jersey knit loops">
+          <defs>
+            <pattern id="knitMacro" width="50" height="58" patternUnits="userSpaceOnUse">
+              <path d="M0 58 L25 23 L50 58 M25 23 L25 0" fill="none" stroke="currentColor" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M-25 58 L0 23 L25 58 M50 58 L75 23 L100 58" fill="none" stroke="currentColor" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </pattern>
+          </defs>
+          <rect width="900" height="700" fill="#FFE6D3"/>
+          <rect width="900" height="700" fill="url(#warmField)"/>
+          <rect width="900" height="700" fill="url(#knitMacro)" color="#C2673C" opacity=".3"/>
+          <rect width="900" height="700" fill="url(#knitMacro)" color="#FFFFFF" opacity=".42" transform="translate(0,-2.4)"/>
+          <rect width="900" height="700" fill="url(#sheen)" opacity=".5"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="lookbook__body">
+      <p class="label reveal-line"><span>02 — Products / 01</span></p>
+      <h2 class="h-display h-display--md">
+        <span class="rl"><span>Single Jersey</span></span>
+        <span class="rl"><span><em>&amp; Piqué</em></span></span>
+      </h2>
+      <p class="lede">Lightweight circular-knit fabrics for t-shirts, polos and everyday layers.</p>
+      <ul class="spec">
+        <li><span>Composition</span><b>TODO_COMPOSITION</b></li>
+        <li><span>GSM range</span><b>TODO_GSM</b></li>
+        <li><span>Finishes</span><b>TODO_FINISHES</b></li>
+      </ul>
+      <a class="btn btn--arrow" href="#contact" aria-label="Enquire about single jersey and piqué">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="panel panel--product panel--product-alt" data-panel data-theme="coral2">
+  <div class="panel__inner lookbook lookbook--rev">
+    <div class="lookbook__visual">
+      <div class="mask">
+        <svg preserveAspectRatio="xMidYMid slice" class="cloth" viewBox="0 0 900 700" role="img" aria-label="Standing bolts of ribbed knit fabric">
+          <rect width="900" height="700" fill="#FFEEE0"/>
+          <rect width="900" height="700" fill="url(#warmField)" opacity=".8"/>
+          <ellipse cx="450" cy="330" rx="420" ry="320" fill="url(#glowCream)" opacity=".45"/>
+
+          <ellipse cx="300" cy="612" rx="150" ry="26" fill="url(#groundShadow)"/>
+          <ellipse cx="470" cy="622" rx="150" ry="26" fill="url(#groundShadow)"/>
+          <ellipse cx="640" cy="612" rx="150" ry="26" fill="url(#groundShadow)"/>
+
+          <!-- bolt 3 (back) -->
+          <g>
+            <path d="M580 210 h120 v390 a60 26 0 0 1 -120 0 Z" fill="url(#foldEspresso)"/>
+            <rect x="580" y="210" width="120" height="390" fill="url(#ribKnit)" color="#FFAA83" opacity=".22"/>
+            <ellipse cx="640" cy="210" rx="60" ry="24" fill="#4A322A"/>
+            <ellipse cx="640" cy="210" rx="40" ry="16" fill="none" stroke="#FFAA83" stroke-opacity=".4" stroke-width="2.5"/>
+            <ellipse cx="640" cy="210" rx="21" ry="8"  fill="none" stroke="#FFAA83" stroke-opacity=".4" stroke-width="2.5"/>
+          </g>
+          <!-- bolt 1 -->
+          <g>
+            <path d="M240 168 h120 v432 a60 26 0 0 1 -120 0 Z" fill="url(#foldLight)"/>
+            <rect x="240" y="168" width="120" height="432" fill="url(#ribKnit)" color="#8E2A08" opacity=".2"/>
+            <ellipse cx="300" cy="168" rx="60" ry="24" fill="#FFE2CC"/>
+            <ellipse cx="300" cy="168" rx="40" ry="16" fill="none" stroke="#C9410E" stroke-opacity=".4" stroke-width="2.5"/>
+            <ellipse cx="300" cy="168" rx="21" ry="8"  fill="none" stroke="#C9410E" stroke-opacity=".4" stroke-width="2.5"/>
+          </g>
+          <!-- bolt 2 (front) -->
+          <g>
+            <path d="M410 250 h120 v360 a60 26 0 0 1 -120 0 Z" fill="url(#foldDark)"/>
+            <rect x="410" y="250" width="120" height="360" fill="url(#ribKnit)" color="#FFD9C2" opacity=".26"/>
+            <ellipse cx="470" cy="250" rx="60" ry="24" fill="#B8360A"/>
+            <ellipse cx="470" cy="250" rx="40" ry="16" fill="none" stroke="#FFD9C2" stroke-opacity=".45" stroke-width="2.5"/>
+            <ellipse cx="470" cy="250" rx="21" ry="8"  fill="none" stroke="#FFD9C2" stroke-opacity=".45" stroke-width="2.5"/>
+          </g>
+          <rect width="900" height="700" fill="url(#sheen)" opacity=".7"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="lookbook__body">
+      <p class="label reveal-line"><span>02 — Products / 02</span></p>
+      <h2 class="h-display h-display--md">
+        <span class="rl"><span>Rib, Interlock</span></span>
+        <span class="rl"><span><em>&amp; Collar</em></span></span>
+      </h2>
+      <p class="lede">Structured double-knit constructions with recovery, body and a clean closed face.</p>
+      <ul class="spec">
+        <li><span>Composition</span><b>TODO_COMPOSITION</b></li>
+        <li><span>Gauge</span><b>TODO_GAUGE</b></li>
+        <li><span>Applications</span><b>TODO_APPLICATIONS</b></li>
+      </ul>
+      <a class="btn btn--arrow" href="#contact" aria-label="Enquire about rib, interlock and collar">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="panel panel--product" data-panel data-theme="orange2">
+  <div class="panel__inner lookbook">
+    <div class="lookbook__visual">
+      <div class="mask">
+        <svg preserveAspectRatio="xMidYMid slice" class="cloth" viewBox="0 0 900 700" role="img" aria-label="Stack of folded knitted garments">
+          <rect width="900" height="700" fill="#FFEADB"/>
+          <rect width="900" height="700" fill="url(#warmField)" opacity=".85"/>
+          <ellipse cx="450" cy="560" rx="300" ry="30" fill="url(#groundShadow)" opacity=".7"/>
+
+          <defs><clipPath id="stackClip">
+              <path d="M198 470 h504 a26 26 0 0 1 0 52 h-504 a26 26 0 0 1 0 -52 Z"/>
+              <path d="M212 396 h476 a26 26 0 0 1 0 52 h-476 a26 26 0 0 1 0 -52 Z"/>
+              <path d="M226 322 h448 a26 26 0 0 1 0 52 h-448 a26 26 0 0 1 0 -52 Z"/>
+              <path d="M240 248 h420 a26 26 0 0 1 0 52 h-420 a26 26 0 0 1 0 -52 Z"/>
+              <path d="M254 174 h392 a26 26 0 0 1 0 52 h-392 a26 26 0 0 1 0 -52 Z"/>
+          </clipPath></defs>
+
+          <g>
+            <path d="M198 470 h504 a26 26 0 0 1 0 52 h-504 a26 26 0 0 1 0 -52 Z" fill="#D9855C"/>
+            <path d="M212 396 h476 a26 26 0 0 1 0 52 h-476 a26 26 0 0 1 0 -52 Z" fill="#FFC6A3"/>
+            <path d="M226 322 h448 a26 26 0 0 1 0 52 h-448 a26 26 0 0 1 0 -52 Z" fill="#FFF3E6"/>
+            <path d="M240 248 h420 a26 26 0 0 1 0 52 h-420 a26 26 0 0 1 0 -52 Z" fill="#E5926A"/>
+            <path d="M254 174 h392 a26 26 0 0 1 0 52 h-392 a26 26 0 0 1 0 -52 Z" fill="#FFD6B8"/>
+            <!-- fold creases -->
+            <g stroke="#A65B32" stroke-opacity=".3" stroke-width="2" fill="none">
+              <path d="M450 470 V522"/><path d="M450 396 V448"/><path d="M450 322 V374"/><path d="M450 248 V300"/><path d="M450 174 V226"/>
+            </g>
+            <g clip-path="url(#stackClip)"><rect x="198" y="174" width="504" height="348" fill="url(#knitLoop)" color="#B46238" opacity=".26"/></g>
+          </g>
+          <rect width="900" height="700" fill="url(#sheen)"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="lookbook__body">
+      <p class="label reveal-line"><span>02 — Products / 03</span></p>
+      <h2 class="h-display h-display--md">
+        <span class="rl"><span>French Terry</span></span>
+        <span class="rl"><span><em>&amp; Fleece</em></span></span>
+      </h2>
+      <p class="lede">Heavier loop-back and brushed constructions for sweatshirts, hoods and outer layers.</p>
+      <ul class="spec">
+        <li><span>Composition</span><b>TODO_COMPOSITION</b></li>
+        <li><span>GSM range</span><b>TODO_GSM</b></li>
+        <li><span>Finishes</span><b>TODO_FINISHES</b></li>
+      </ul>
+      <a class="btn btn--arrow" href="#contact" aria-label="Enquire about french terry and fleece">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ PROCESS ============================================================ -->
+<section class="panel panel--process" id="process" data-panel data-theme="cream2">
+  <div class="panel__inner process">
+    <header class="process__head">
+      <p class="label reveal-line"><span>03 — Process</span></p>
+      <h2 class="h-display h-display--md">
+        <span class="rl"><span>Yarn in.</span></span>
+        <span class="rl"><span><em>Garment out.</em></span></span>
+      </h2>
+    </header>
+
+
+    <figure class="process__figure" data-parallax="22">
+      <div class="mask">
+        <svg preserveAspectRatio="xMidYMid slice" viewBox="0 0 760 560" role="img" aria-label="Cones of wound yarn on the knitting floor">
+          <defs>
+      <clipPath id="coneA"><path d="M150 150 L106 470 Q180 501.08 254 470 L210 150 Q180 135.72 150 150 Z"/></clipPath>
+      <clipPath id="coneB"><path d="M346 106 L298 478 Q380 512.44 462 478 L414 106 Q380 89.816 346 106 Z"/></clipPath>
+      <clipPath id="coneC"><path d="M552 168 L510 466 Q580 495.4 650 466 L608 168 Q580 154.672 552 168 Z"/></clipPath>
+            <linearGradient id="coneShade" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%"   stop-color="#FFFFFF" stop-opacity=".42"/>
+              <stop offset="34%"  stop-color="#FFFFFF" stop-opacity=".05"/>
+              <stop offset="72%"  stop-color="#8A4520" stop-opacity=".14"/>
+              <stop offset="100%" stop-color="#6E2A08" stop-opacity=".3"/>
+            </linearGradient>
+          </defs>
+          <rect width="760" height="560" fill="#FFF0E2"/>
+          <rect width="760" height="560" fill="url(#warmField)" opacity=".7"/>
+          <rect width="760" height="560" fill="url(#plainWeave)" color="#C2673C" opacity=".07"/>
+        <g>
+          <ellipse cx="180" cy="490" rx="92" ry="22" fill="url(#groundShadow)" opacity=".6"/>
+          <path d="M150 150 L106 470 Q180 501.08 254 470 L210 150 Q180 135.72 150 150 Z" fill="#E5926A"/>
+          <g clip-path="url(#coneA)">
+            <rect x="102" y="120" width="156" height="390" fill="url(#coneShade)"/>
+            <g fill="none" stroke="#8E4A24" stroke-opacity=".26" stroke-width="1.5">
+              <path d="M148.5 160.7 Q180.0 170.4 211.5 160.7 M147.1 171.3 Q180.0 181.5 212.9 171.3 M145.6 182.0 Q180.0 192.6 214.4 182.0 M144.1 192.7 Q180.0 203.7 215.9 192.7 M142.7 203.3 Q180.0 214.8 217.3 203.3 M141.2 214.0 Q180.0 226.0 218.8 214.0 M139.7 224.7 Q180.0 237.1 220.3 224.7 M138.3 235.3 Q180.0 248.2 221.7 235.3 M136.8 246.0 Q180.0 259.3 223.2 246.0 M135.3 256.7 Q180.0 270.4 224.7 256.7 M133.9 267.3 Q180.0 281.5 226.1 267.3 M132.4 278.0 Q180.0 292.7 227.6 278.0 M130.9 288.7 Q180.0 303.8 229.1 288.7 M129.5 299.3 Q180.0 314.9 230.5 299.3 M128.0 310.0 Q180.0 326.0 232.0 310.0 M126.5 320.7 Q180.0 337.1 233.5 320.7 M125.1 331.3 Q180.0 348.3 234.9 331.3 M123.6 342.0 Q180.0 359.4 236.4 342.0 M122.1 352.7 Q180.0 370.5 237.9 352.7 M120.7 363.3 Q180.0 381.6 239.3 363.3 M119.2 374.0 Q180.0 392.7 240.8 374.0 M117.7 384.7 Q180.0 403.8 242.3 384.7 M116.3 395.3 Q180.0 415.0 243.7 395.3 M114.8 406.0 Q180.0 426.1 245.2 406.0 M113.3 416.7 Q180.0 437.2 246.7 416.7 M111.9 427.3 Q180.0 448.3 248.1 427.3 M110.4 438.0 Q180.0 459.4 249.6 438.0 M108.9 448.7 Q180.0 470.6 251.1 448.7 M107.5 459.3 Q180.0 481.7 252.5 459.3"/>
+            </g>
+          </g>
+          <ellipse cx="180" cy="150" rx="30" ry="10.2" fill="#FFF3E6"/>
+          <ellipse cx="180" cy="150" rx="12.6" ry="4.3" fill="#B46238" opacity=".35"/>
+        </g>
+        <g>
+          <ellipse cx="380" cy="500" rx="102" ry="25" fill="url(#groundShadow)" opacity=".6"/>
+          <path d="M346 106 L298 478 Q380 512.44 462 478 L414 106 Q380 89.816 346 106 Z" fill="#FFD6B8"/>
+          <g clip-path="url(#coneB)">
+            <rect x="294" y="76" width="172" height="442" fill="url(#coneShade)"/>
+            <g fill="none" stroke="#8E4A24" stroke-opacity=".26" stroke-width="1.5">
+              <path d="M344.4 118.4 Q380.0 129.4 415.6 118.4 M342.8 130.8 Q380.0 142.3 417.2 130.8 M341.2 143.2 Q380.0 155.2 418.8 143.2 M339.6 155.6 Q380.0 168.0 420.4 155.6 M338.0 168.0 Q380.0 180.9 422.0 168.0 M336.4 180.4 Q380.0 193.8 423.6 180.4 M334.8 192.8 Q380.0 206.7 425.2 192.8 M333.2 205.2 Q380.0 219.6 426.8 205.2 M331.6 217.6 Q380.0 232.5 428.4 217.6 M330.0 230.0 Q380.0 245.4 430.0 230.0 M328.4 242.4 Q380.0 258.3 431.6 242.4 M326.8 254.8 Q380.0 271.2 433.2 254.8 M325.2 267.2 Q380.0 284.1 434.8 267.2 M323.6 279.6 Q380.0 297.0 436.4 279.6 M322.0 292.0 Q380.0 309.9 438.0 292.0 M320.4 304.4 Q380.0 322.8 439.6 304.4 M318.8 316.8 Q380.0 335.6 441.2 316.8 M317.2 329.2 Q380.0 348.5 442.8 329.2 M315.6 341.6 Q380.0 361.4 444.4 341.6 M314.0 354.0 Q380.0 374.3 446.0 354.0 M312.4 366.4 Q380.0 387.2 447.6 366.4 M310.8 378.8 Q380.0 400.1 449.2 378.8 M309.2 391.2 Q380.0 413.0 450.8 391.2 M307.6 403.6 Q380.0 425.9 452.4 403.6 M306.0 416.0 Q380.0 438.8 454.0 416.0 M304.4 428.4 Q380.0 451.7 455.6 428.4 M302.8 440.8 Q380.0 464.6 457.2 440.8 M301.2 453.2 Q380.0 477.5 458.8 453.2 M299.6 465.6 Q380.0 490.4 460.4 465.6"/>
+            </g>
+          </g>
+          <ellipse cx="380" cy="106" rx="34" ry="11.6" fill="#FFFFFF"/>
+          <ellipse cx="380" cy="106" rx="14.3" ry="4.9" fill="#B46238" opacity=".35"/>
+        </g>
+        <g>
+          <ellipse cx="580" cy="485" rx="88" ry="21" fill="url(#groundShadow)" opacity=".6"/>
+          <path d="M552 168 L510 466 Q580 495.4 650 466 L608 168 Q580 154.672 552 168 Z" fill="#D9855C"/>
+          <g clip-path="url(#coneC)">
+            <rect x="506" y="138" width="148" height="368" fill="url(#coneShade)"/>
+            <g fill="none" stroke="#8E4A24" stroke-opacity=".26" stroke-width="1.5">
+              <path d="M550.6 177.9 Q580.0 187.0 609.4 177.9 M549.2 187.9 Q580.0 197.4 610.8 187.9 M547.8 197.8 Q580.0 207.7 612.2 197.8 M546.4 207.7 Q580.0 218.1 613.6 207.7 M545.0 217.7 Q580.0 228.4 615.0 217.7 M543.6 227.6 Q580.0 238.8 616.4 227.6 M542.2 237.5 Q580.0 249.2 617.8 237.5 M540.8 247.5 Q580.0 259.5 619.2 247.5 M539.4 257.4 Q580.0 269.9 620.6 257.4 M538.0 267.3 Q580.0 280.3 622.0 267.3 M536.6 277.3 Q580.0 290.6 623.4 277.3 M535.2 287.2 Q580.0 301.0 624.8 287.2 M533.8 297.1 Q580.0 311.4 626.2 297.1 M532.4 307.1 Q580.0 321.7 627.6 307.1 M531.0 317.0 Q580.0 332.1 629.0 317.0 M529.6 326.9 Q580.0 342.5 630.4 326.9 M528.2 336.9 Q580.0 352.8 631.8 336.9 M526.8 346.8 Q580.0 363.2 633.2 346.8 M525.4 356.7 Q580.0 373.6 634.6 356.7 M524.0 366.7 Q580.0 383.9 636.0 366.7 M522.6 376.6 Q580.0 394.3 637.4 376.6 M521.2 386.5 Q580.0 404.6 638.8 386.5 M519.8 396.5 Q580.0 415.0 640.2 396.5 M518.4 406.4 Q580.0 425.4 641.6 406.4 M517.0 416.3 Q580.0 435.7 643.0 416.3 M515.6 426.3 Q580.0 446.1 644.4 426.3 M514.2 436.2 Q580.0 456.5 645.8 436.2 M512.8 446.1 Q580.0 466.8 647.2 446.1 M511.4 456.1 Q580.0 477.2 648.6 456.1"/>
+            </g>
+          </g>
+          <ellipse cx="580" cy="168" rx="28" ry="9.5" fill="#FFE6D3"/>
+          <ellipse cx="580" cy="168" rx="11.8" ry="4.0" fill="#B46238" opacity=".35"/>
+        </g>
+          <rect width="760" height="560" fill="url(#sheen)" opacity=".45"/>
+        </svg>
+      </div>
+    </figure>
+
+    <div class="process__track">
+      <div class="process__line" aria-hidden="true"><i data-progress-line></i></div>
+
+      <article class="step">
+        <span class="step__num" aria-hidden="true">01</span>
+        <h3>Yarn &amp; sourcing</h3>
+        <p>Counts, blends and lots selected against the programme before a single needle moves.</p>
+      </article>
+      <article class="step">
+        <span class="step__num" aria-hidden="true">02</span>
+        <h3>Knitting</h3>
+        <p>Circular and flatbed machines set to gauge, with loop length checked on the frame.</p>
+      </article>
+      <article class="step">
+        <span class="step__num" aria-hidden="true">03</span>
+        <h3>Dyeing &amp; finishing</h3>
+        <p>Shade matched under controlled light, then compacted and set to a stable hand.</p>
+      </article>
+      <article class="step">
+        <span class="step__num" aria-hidden="true">04</span>
+        <h3>Cut, make &amp; pack</h3>
+        <p>Cutting, stitching, inspection and export-ready packing to the buyer's spec.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ QUALITY ============================================================ -->
+<section class="panel panel--quality" id="quality" data-panel data-theme="espresso">
+  <div class="panel__inner quality">
+    <svg class="quality__weave" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="1200" height="600" fill="url(#plainWeave)" color="#FF7954" opacity=".07"/>
+    </svg>
+
+    <svg class="quality__loop" viewBox="0 0 470 430" aria-hidden="true">
+      <g fill="none" stroke="#FF7954" stroke-linecap="round" stroke-linejoin="round">
+        <g stroke-opacity=".34" stroke-width="3">
+          <path d="M25 405 L135 170 L245 405 M135 170 L135 78"/>
+          <path d="M225 405 L335 170 L445 405 M335 170 L335 78"/>
+        </g>
+        <g stroke-opacity=".16" stroke-width="3">
+          <path d="M-75 250 L35 15 L145 250 M35 15 L35 -77"/>
+          <path d="M125 250 L235 15 L345 250 M235 15 L235 -77"/>
+          <path d="M325 250 L435 15 L545 250 M435 15 L435 -77"/>
+        </g>
+      </g>
+    </svg>
+
+    <header class="quality__head">
+      <p class="label label--onDark reveal-line"><span>04 — Quality</span></p>
+      <h2 class="h-display h-display--md h-display--onDark">
+        <span class="rl"><span>Checked at</span></span>
+        <span class="rl"><span><em>every stage.</em></span></span>
+      </h2>
+      <p class="lede lede--onDark">Inspection is built into the line rather than bolted on at the end — yarn, greige, finished fabric and final garment each carry their own gate.</p>
+    </header>
+
+    <dl class="stats" data-todo="quality-metrics">
+      <div class="stat" data-stat="0"><dt class="stat__v"><b>00</b><span>%</span></dt><dd class="stat__l">TODO_METRIC_LABEL</dd></div>
+      <div class="stat" data-stat="1"><dt class="stat__v"><b>00</b><span></span></dt><dd class="stat__l">TODO_METRIC_LABEL</dd></div>
+      <div class="stat" data-stat="2"><dt class="stat__v"><b>00</b><span>+</span></dt><dd class="stat__l">TODO_METRIC_LABEL</dd></div>
+      <div class="stat" data-stat="3"><dt class="stat__v"><b>00</b><span></span></dt><dd class="stat__l">TODO_METRIC_LABEL</dd></div>
+    </dl>
+
+    <p class="quality__note">Placeholder figures — replace with verified metrics before publishing. Certifications: TODO_CERTIFICATIONS.</p>
+  </div>
+</section>
+
+
+<!-- ============================================================ GALLERY ============================================================ -->
+<section class="panel panel--gallery" id="gallery" data-panel data-theme="coral">
+  <div class="panel__inner gallery">
+    <header class="gallery__head">
+      <p class="label reveal-line"><span>05 — Gallery</span></p>
+      <h2 class="h-display h-display--sm">
+        <span class="rl"><span>From the floor.</span></span>
+      </h2>
+    </header>
+
+    <div class="gallery__grid">
+    <figure class="g g--1" data-parallax="18"><div class="mask">
+      <svg preserveAspectRatio="xMidYMid slice" viewBox="0 0 600 800" role="img" aria-label="Close weave detail">
+        <rect width="600" height="800" fill="#E84912"/>
+        <rect width="600" height="800" fill="url(#knitL)" color="#FFD9C2" opacity=".32"/>
+        <rect width="600" height="800" fill="url(#sheen)"/>
+      </svg></div></figure>
+
+    <figure class="g g--2" data-parallax="30"><div class="mask">
+      <svg preserveAspectRatio="xMidYMid slice" viewBox="0 0 800 520" role="img" aria-label="Folded fabric detail">
+        <rect width="800" height="520" fill="#FFAA83"/>
+        <path d="M0 300 C 180 250, 300 350, 480 296 S 720 220, 800 258 V520 H0 Z" fill="url(#foldLight)"/>
+        <path d="M0 380 C 190 330, 310 428, 490 376 S 730 306, 800 342 V520 H0 Z" fill="url(#foldDark)"/>
+        <rect width="800" height="520" fill="url(#plainWeave)" color="#FFF5EB" opacity=".14"/>
+        <rect width="800" height="520" fill="url(#sheen)"/>
+      </svg></div></figure>
+
+    <figure class="g g--3" data-parallax="22"><div class="mask">
+      <svg preserveAspectRatio="xMidYMid slice" viewBox="0 0 460 700" role="img" aria-label="Folded knitted pieces stacked">
+        <rect width="460" height="700" fill="#F45A1D"/>
+        <rect width="460" height="700" fill="url(#warmField)" opacity=".35"/>
+        <ellipse cx="230" cy="586" rx="190" ry="24" fill="url(#groundShadow)" opacity=".6"/>
+        <defs><clipPath id="gStackClip">
+            <path d="M80 520 h300 a24 24 0 0 1 0 48 h-300 a24 24 0 0 1 0 -48 Z"/>
+            <path d="M92 448 h276 a24 24 0 0 1 0 48 h-276 a24 24 0 0 1 0 -48 Z"/>
+            <path d="M104 376 h252 a24 24 0 0 1 0 48 h-252 a24 24 0 0 1 0 -48 Z"/>
+            <path d="M116 304 h228 a24 24 0 0 1 0 48 h-228 a24 24 0 0 1 0 -48 Z"/>
+            <path d="M128 232 h204 a24 24 0 0 1 0 48 h-204 a24 24 0 0 1 0 -48 Z"/>
+        </clipPath></defs>
+        <g>
+          <path d="M80 520 h300 a24 24 0 0 1 0 48 h-300 a24 24 0 0 1 0 -48 Z" fill="#B8360A"/>
+          <path d="M92 448 h276 a24 24 0 0 1 0 48 h-276 a24 24 0 0 1 0 -48 Z" fill="#FFC6A3"/>
+          <path d="M104 376 h252 a24 24 0 0 1 0 48 h-252 a24 24 0 0 1 0 -48 Z" fill="#E5926A"/>
+          <path d="M116 304 h228 a24 24 0 0 1 0 48 h-228 a24 24 0 0 1 0 -48 Z" fill="#FFF3E6"/>
+          <path d="M128 232 h204 a24 24 0 0 1 0 48 h-204 a24 24 0 0 1 0 -48 Z" fill="#D9855C"/>
+          <g stroke="#7A2C0C" stroke-opacity=".22" stroke-width="2" fill="none">
+            <path d="M230 520 V568"/><path d="M230 448 V496"/><path d="M230 376 V424"/>
+            <path d="M230 304 V352"/><path d="M230 232 V280"/>
+          </g>
+          <g clip-path="url(#gStackClip)"><rect x="80" y="232" width="300" height="336" fill="url(#knitLoop)" color="#8E4A24" opacity=".24"/></g>
+        </g>
+        <rect width="460" height="700" fill="url(#sheen)" opacity=".55"/>
+      </svg></div></figure>
+
+    <figure class="g g--4" data-parallax="14"><div class="mask">
+      <svg preserveAspectRatio="xMidYMid slice" viewBox="0 0 620 420" role="img" aria-label="Cream knitted swatch">
+        <rect width="620" height="420" fill="#FFF5EB"/>
+        <rect width="620" height="420" fill="url(#knitLoop)" color="#FFAA83" opacity=".6"/>
+        <rect width="620" height="420" fill="url(#sheen)" opacity=".5"/>
+      </svg></div></figure>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ CONTACT ============================================================ -->
+<section class="panel panel--contact" id="contact" data-panel data-theme="orange">
+  <div class="panel__inner contact">
+    <div class="contact__lead">
+      <p class="label reveal-line"><span>06 — Contact</span></p>
+      <h2 class="h-display">
+        <span class="rl"><span>Tell us what</span></span>
+        <span class="rl"><span>you need</span></span>
+        <span class="rl"><span><em>made.</em></span></span>
+      </h2>
+    </div>
+
+    <div class="contact__grid">
+      <address class="contact__info">
+        <div><span class="label">Email</span><a href="mailto:TODO_EMAIL" data-todo="email">TODO_EMAIL</a></div>
+        <div><span class="label">Phone</span><a href="tel:TODO_PHONE" data-todo="phone">TODO_PHONE</a></div>
+        <div><span class="label">Address</span><p data-todo="address">TODO_ADDRESS_LINE_1<br>TODO_CITY, TODO_STATE TODO_POSTCODE<br>TODO_COUNTRY</p></div>
+      </address>
+
+      <form class="form" data-todo="form-endpoint" novalidate>
+        <div class="field">
+          <input type="text" id="f-name" name="name" placeholder=" " required autocomplete="name">
+          <label for="f-name">Name</label>
+        </div>
+        <div class="field">
+          <input type="email" id="f-email" name="email" placeholder=" " required autocomplete="email">
+          <label for="f-email">Email</label>
+        </div>
+        <div class="field">
+          <textarea id="f-msg" name="message" rows="3" placeholder=" " required></textarea>
+          <label for="f-msg">What are you looking to produce?</label>
+        </div>
+        <button class="btn btn--primary" type="submit">
+          <span>Send enquiry</span>
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <p class="form__note" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+
+<!-- ============================================================ FOOTER ============================================================ -->
+<footer class="panel panel--footer" data-panel data-theme="espresso">
+  <div class="panel__inner foot">
+    <div class="foot__top">
+      <nav class="foot__nav" aria-label="Footer">
+        <a href="#about">About</a><a href="#products">Products</a><a href="#process">Process</a>
+        <a href="#quality">Quality</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a>
+      </nav>
+      <div class="foot__meta">
+        <p>TODO_ADDRESS_LINE_1, TODO_CITY</p>
+        <p><a href="mailto:TODO_EMAIL">TODO_EMAIL</a></p>
+      </div>
+    </div>
+
+    <div class="foot__wordmark" aria-hidden="true">
+      <span class="rl"><span>KNITMAX</span></span>
+    </div>
+
+    <div class="foot__base">
+      <p>&copy; <span data-year></span> Knitmax Exports. All rights reserved.</p>
+      <p>TODO_REGISTRATION / GST / IEC details</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/content.js"></script>
+<script src="js/knitmax.js"></script>
+</body>
+</html>
