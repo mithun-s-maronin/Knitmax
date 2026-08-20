@@ -58,10 +58,13 @@ the mask, so no layout changes are needed.
 
 ## Motion
 
-- **Panel stacking** — on screens at least 861×720, each panel is `position:
-  sticky` and the next rises over it with rounded shoulders while the outgoing
-  one scales down, dims and blurs very slightly. Below that, panels flow
-  normally and keep the rounded overlap.
+- **Panel stacking** — every panel is `position: sticky`, and the next rises
+  over it with rounded shoulders while the outgoing one scales down, dims and
+  blurs very slightly. This runs at all viewport sizes. Panels taller than the
+  viewport (most sections on a phone) get a negative stick offset from JS, so
+  they scroll fully and then pin by their *bottom* edge — otherwise their lower
+  content would sit behind a pinned panel and be unreachable. Blur is reduced
+  on small screens, where it is the expensive part of the effect.
 - **Reveals** — headings rise out of an overflow mask line by line; images
   reveal with a `clip-path` wipe while scaling `1.09 → 1`.
 - **Parallax** — capped at 14–30px over a full scroll range.

@@ -24,11 +24,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # enablement:true turns Pages on for the repo the first time this runs,
-      # so the site needs no manual setup in Settings.
+      # Pages itself has to be switched on once by a repo admin
+      # (Settings -> Pages -> Source: "GitHub Actions"). The Actions token is
+      # refused for site creation, so enablement: true cannot bootstrap it.
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       # The site is already static — the repo root is the artifact.
       - uses: actions/upload-pages-artifact@v3

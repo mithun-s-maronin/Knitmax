@@ -95,16 +95,25 @@
   var processPanel = document.getElementById('process');
   var ticking = false;
 
-  function stackOn() {
-    return matchMedia('(min-width:861px) and (min-height:720px)').matches;
+  /* The stack now runs at every size. Panels taller than the viewport get a
+     negative stick offset so they scroll fully before pinning by their bottom
+     edge — otherwise their lower content would sit behind a pinned panel and
+     be unreachable. Recomputed on resize and after fonts settle. */
+  function measureStick() {
+    var vh = innerHeight;
+    for (var i = 0; i < panels.length; i++) {
+      panels[i].style.setProperty('--stick-top',
+        Math.min(0, vh - panels[i].offsetHeight) + 'px');
+    }
   }
+  function stackOn() { return !reduce; }
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
 
   function frame() {
     var vh = innerHeight, i, r;
 
     /* --- panels recede as the next sheet is laid over them --- */
-    if (stackOn() && !reduce) {
+    if (stackOn()) {
       for (i = 0; i < panels.length; i++) {
         var next = panels[i + 1], p = 0;
         if (next) p = clamp(1 - next.getBoundingClientRect().top / vh);
@@ -226,6 +235,7 @@
   /* ---------------------------------------------------------------- init */
   applyContent();
   prepareReveals();
+  measureStick();
   observe();
   heroTilt();
   mobileMenu();
@@ -233,5 +243,10 @@
   frame();
 
   addEventListener('scroll', request, { passive: true });
-  addEventListener('resize', request, { passive: true });
+  addEventListener('resize', function () { measureStick(); request(); }, { passive: true });
+  /* panel heights shift once the webfont swaps in */
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { measureStick(); request(); });
+  }
+  addEventListener('load', function () { measureStick(); request(); });
 })();
