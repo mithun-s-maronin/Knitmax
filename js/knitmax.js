@@ -101,12 +101,16 @@
      be unreachable. Recomputed on resize and after fonts settle. */
   function measureStick() {
     var vh = innerHeight;
+    if (!matchMedia('(min-width:861px)').matches) {
+      for (var j = 0; j < panels.length; j++) panels[j].style.removeProperty('--stick-top');
+      return;
+    }
     for (var i = 0; i < panels.length; i++) {
       panels[i].style.setProperty('--stick-top',
         Math.min(0, vh - panels[i].offsetHeight) + 'px');
     }
   }
-  function stackOn() { return !reduce; }
+  function stackOn() { return !reduce && matchMedia('(min-width:861px)').matches; }
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
 
   function frame() {

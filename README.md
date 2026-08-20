@@ -58,13 +58,17 @@ the mask, so no layout changes are needed.
 
 ## Motion
 
-- **Panel stacking** — every panel is `position: sticky`, and the next rises
-  over it with rounded shoulders while the outgoing one scales down, dims and
-  blurs very slightly. This runs at all viewport sizes. Panels taller than the
-  viewport (most sections on a phone) get a negative stick offset from JS, so
-  they scroll fully and then pin by their *bottom* edge — otherwise their lower
-  content would sit behind a pinned panel and be unreachable. Blur is reduced
-  on small screens, where it is the expensive part of the effect.
+- **Panel stacking** — from 861px up, each panel is `position: sticky` and the
+  next rises over it with rounded shoulders while the outgoing one scales down,
+  dims and blurs very slightly. Panels taller than the viewport get a negative
+  stick offset from JS so they scroll fully and then pin by their *bottom* edge,
+  rather than stranding their lower content behind a pinned panel.
+  Below 861px the page keeps a lighter treatment: panels flow normally with the
+  rounded overlap, and the recede, veil and blur are dropped.
+- **Short viewports** — landscape tablets and short desktop windows (861px+
+  wide, under 720px tall) keep the desktop grid but compress the vertical
+  rhythm, and the image-driven panels get a definite height so an SVG's
+  intrinsic ratio can't set the panel height.
 - **Reveals** — headings rise out of an overflow mask line by line; images
   reveal with a `clip-path` wipe while scaling `1.09 → 1`.
 - **Parallax** — capped at 14–30px over a full scroll range.
