@@ -101,7 +101,7 @@
      be unreachable. Recomputed on resize and after fonts settle. */
   function measureStick() {
     var vh = innerHeight;
-    if (!matchMedia('(min-width:861px)').matches) {
+    if (!matchMedia('(min-width:861px) and (hover:hover) and (pointer:fine)').matches) {
       for (var j = 0; j < panels.length; j++) panels[j].style.removeProperty('--stick-top');
       return;
     }
@@ -110,7 +110,7 @@
         Math.min(0, vh - panels[i].offsetHeight) + 'px');
     }
   }
-  function stackOn() { return !reduce && matchMedia('(min-width:861px)').matches; }
+  function stackOn() { return !reduce && matchMedia('(min-width:861px) and (hover:hover) and (pointer:fine)').matches; }
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
 
   function frame() {
