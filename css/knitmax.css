@@ -106,56 +106,36 @@ body{
   min-height:0;
   display:flex;
   padding:clamp(6.5rem,11vh,9rem) var(--gut) clamp(3rem,6vh,5rem);
+  will-change:transform;
 }
 
-/* receding veil applied to the outgoing panel — only painted where the
-   cinematic stack is actually enabled (see the enhancement query below) */
+/* receding veil applied to the outgoing panel */
 .panel::after{
   content:"";position:absolute;inset:0;z-index:5;pointer-events:none;
-  display:none;
   background:#160C08;
   opacity:calc(var(--recede,0) * .42);
   transition:opacity .1s linear;
 }
 
-/* ---------------------------------------------------------------------------
-   The lighter treatment is the DEFAULT: panels flow normally with the rounded
-   overlap and nothing composites. The cinematic stack is an enhancement layered
-   on top, and only for a real pointer device.
-
-   Gating it on width alone was wrong. A landscape tablet is ~1280px wide, so it
-   was getting full-viewport filter:blur() on sticky panels plus a mix-blend-mode
-   grain layer — enough to overwhelm a touch device's compositor, which left
-   stale unrepainted tiles stacked over each other. Touch devices of any size now
-   get the safe path.
-   --------------------------------------------------------------------------- */
-@media (min-width:861px) and (hover:hover) and (pointer:fine){
-  .panel{
-    position:sticky;
-    top:var(--stick-top,0px);
-    box-shadow:0 -34px 70px -26px rgba(22,12,8,.45);
-  }
-  .panel::after{display:block}
-  .panel--footer{position:relative;top:auto;height:auto}
-  .panel__inner{
-    will-change:transform;
-    transform:scale(calc(1 - .055 * var(--recede,0)))
-              translateY(calc(var(--recede,0) * -1.6vh));
-    filter:blur(calc(var(--recede,0) * 2.6px));
-    transform-origin:50% 30%;
-  }
+/* The stack runs at every size, phones included. --stick-top is set per panel
+   by JS: 0 for panels that fit the viewport (they pin at the top), negative for
+   taller ones (they scroll fully, then pin by their bottom edge) so no content
+   is ever stranded behind a pinned panel. */
+.panel{
+  position:sticky;
+  top:var(--stick-top,0px);
+  box-shadow:0 -34px 70px -26px rgba(22,12,8,.45);
+}
+.panel--footer{position:relative;top:auto;height:auto}
+.panel__inner{
+  transform:scale(calc(1 - .055 * var(--recede,0)))
+            translateY(calc(var(--recede,0) * -1.6vh));
+  filter:blur(calc(var(--recede,0) * 2.6px));
+  transform-origin:50% 30%;
 }
 @media (min-width:861px) and (min-height:720px){
   .panel{height:100svh}
   .panel--footer{height:auto}
-}
-
-/* touch / no fine pointer: flow, with the rounded shoulder kept */
-@media (hover:none),(pointer:coarse),(max-width:860px){
-  .panel{position:relative;top:auto;margin-top:-2px;box-shadow:0 -22px 46px -20px rgba(22,12,8,.34)}
-  .panel__inner{transform:none;filter:none;will-change:auto}
-  /* a full-page blending group is expensive and the grain is barely visible */
-  .grain{display:none}
 }
 
 /* ===========================================================================
@@ -590,7 +570,8 @@ body{
   .nav__cta{display:none}
   .nav__burger{display:block}
 
-  .panel{min-height:auto}
+  .panel{min-height:100svh}
+  .panel--footer{min-height:0}
   .panel__inner{padding:clamp(5.5rem,12vh,7rem) var(--gut) clamp(3.5rem,8vh,5rem);flex-direction:column}
 
   /* --- hero --- */

@@ -58,23 +58,12 @@ the mask, so no layout changes are needed.
 
 ## Motion
 
-- **Panel stacking** — an *enhancement*, not the default. The base treatment is
-  light: panels flow normally with a rounded overlap and nothing composites.
-  Where the viewport is at least 861px wide **and the device has a fine pointer**
-  (`hover: hover` and `pointer: fine`), each panel becomes `position: sticky` and
-  the next rises over it while the outgoing one scales down, dims and blurs.
+- **Panel stacking** — every panel is `position: sticky`, and the next rises
+  over it with rounded shoulders while the outgoing one scales down, dims and
+  blurs very slightly. This runs at every viewport size, phones included.
   Panels taller than the viewport get a negative stick offset from JS so they
-  scroll fully and then pin by their *bottom* edge.
-
-  The pointer test matters: gating on width alone gave landscape tablets
-  (~1280px) full-viewport `filter: blur()` on sticky panels plus a
-  `mix-blend-mode` grain layer, which overwhelmed the touch compositor and left
-  stale tiles painted over each other. Touch devices of any size take the light
-  path, and the grain overlay is dropped there too.
-- **Short viewports** — landscape tablets and short desktop windows (861px+
-  wide, under 720px tall) keep the desktop grid but compress the vertical
-  rhythm, and the image-driven panels get a definite height so an SVG's
-  intrinsic ratio can't set the panel height.
+  scroll fully and then pin by their *bottom* edge, rather than stranding their
+  lower content behind a pinned panel.
 - **Reveals** — headings rise out of an overflow mask line by line; images
   reveal with a `clip-path` wipe while scaling `1.09 → 1`.
 - **Parallax** — capped at 14–30px over a full scroll range.
