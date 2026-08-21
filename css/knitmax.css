@@ -66,7 +66,7 @@ body{
 /* ---------- film grain: keeps large flat oranges from going digital-flat ---------- */
 .grain{
   position:fixed;inset:0;z-index:9000;pointer-events:none;
-  opacity:.035;mix-blend-mode:overlay;
+  opacity:.055;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -106,12 +106,12 @@ body{
   min-height:0;
   display:flex;
   padding:clamp(6.5rem,11vh,9rem) var(--gut) clamp(3rem,6vh,5rem);
-  will-change:transform;
 }
 
 /* receding veil applied to the outgoing panel */
 .panel::after{
   content:"";position:absolute;inset:0;z-index:5;pointer-events:none;
+  display:none;
   background:#160C08;
   opacity:calc(var(--recede,0) * .42);
   transition:opacity .1s linear;
@@ -127,15 +127,31 @@ body{
   box-shadow:0 -34px 70px -26px rgba(22,12,8,.45);
 }
 .panel--footer{position:relative;top:auto;height:auto}
-.panel__inner{
+.panel__inner{transform-origin:50% 30%}
+
+/* Only the one or two panels actually mid-transition are promoted, filtered
+   and veiled. Everything else stays an ordinary unpromoted layer. */
+.panel.is-receding::after{display:block}
+.panel.is-receding .panel__inner{
+  will-change:transform;
   transform:scale(calc(1 - .055 * var(--recede,0)))
             translateY(calc(var(--recede,0) * -1.6vh));
   filter:blur(calc(var(--recede,0) * 2.6px));
-  transform-origin:50% 30%;
 }
 @media (min-width:861px) and (min-height:720px){
   .panel{height:100svh}
   .panel--footer{height:auto}
+}
+
+/* Touch devices: trade the live backdrop sampling for a static fill, and take
+   the blur radius down. The layering, scale, dim and grain all stay. */
+@media (hover:none),(pointer:coarse){
+  .panel.is-receding .panel__inner{filter:blur(calc(var(--recede,0) * 1.4px))}
+  .panel{box-shadow:0 -22px 44px -20px rgba(22,12,8,.4)}
+  .nav__pill{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(255,245,235,.16)}
+  .nav[data-on="light"] .nav__pill{background:rgba(29,18,14,.08)}
+  .chip{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(255,245,235,.2)}
+  .menu{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(29,18,14,.985)}
 }
 
 /* ===========================================================================

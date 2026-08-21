@@ -117,10 +117,23 @@
       for (i = 0; i < panels.length; i++) {
         var next = panels[i + 1], p = 0;
         if (next) p = clamp(1 - next.getBoundingClientRect().top / vh);
-        panels[i].style.setProperty('--recede', p.toFixed(3));
+        /* Flag only the panels actually mid-transition. The CSS hangs the
+           transform, blur, veil and layer promotion off .is-receding, so at any
+           moment one or two layers are promoted instead of all ten — which is
+           what a touch compositor could not keep up with. */
+        if (p > 0.004) {
+          panels[i].style.setProperty('--recede', p.toFixed(3));
+          if (!panels[i].classList.contains('is-receding')) panels[i].classList.add('is-receding');
+        } else if (panels[i].classList.contains('is-receding')) {
+          panels[i].classList.remove('is-receding');
+          panels[i].style.removeProperty('--recede');
+        }
       }
     } else {
-      for (i = 0; i < panels.length; i++) panels[i].style.setProperty('--recede', '0');
+      for (i = 0; i < panels.length; i++) {
+        panels[i].classList.remove('is-receding');
+        panels[i].style.removeProperty('--recede');
+      }
     }
 
     /* --- very light parallax --- */
