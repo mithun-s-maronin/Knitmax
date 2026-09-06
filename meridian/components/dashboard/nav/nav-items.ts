@@ -1,5 +1,4 @@
 import {
-  Bot,
   CalendarCheck,
   ChartLine,
   CreditCard,
@@ -54,9 +53,8 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "Tools",
     items: [
       { href: "/dashboard/goals", label: "Goals", icon: Target, primary: true },
-      { href: "/dashboard/simulator", label: "Simulator", icon: SlidersHorizontal },
+      { href: "/dashboard/simulator", label: "Simulator", icon: SlidersHorizontal, primary: true },
       { href: "/dashboard/calculators", label: "Calculators", icon: Calculator },
-      { href: "/dashboard/ai", label: "AI assistant", icon: Bot, primary: true },
     ],
   },
   {

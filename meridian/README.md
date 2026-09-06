@@ -1,12 +1,12 @@
 # Meridian
 
-An AI-powered financial health platform. Answer a short assessment, get a
-Financial Health Score out of 100 across four weighted pillars, see the exact
-calculation, and work a prioritised plan — with an assistant that explains the
-result but never invents a number.
+A financial health platform. Answer a short assessment, get a Financial Health
+Score out of 100 across four weighted pillars, see the exact calculation, and
+work a prioritised plan.
 
-Built with Next.js 16, React 19, TypeScript, Tailwind v4, Supabase (PostgreSQL)
-and the Anthropic API.
+Built with Next.js 16, React 19, TypeScript, Tailwind v4 and Supabase
+(PostgreSQL). No third-party service is involved in producing a score: every
+number comes from a deterministic engine in this repository.
 
 ---
 
@@ -31,9 +31,9 @@ and the Anthropic API.
 - **Measured recommendations.** Each recommendation's point value comes from
   re-running the engine with that change applied. Changes that cannot be
   expressed as an input adjustment carry no number rather than a guess.
-- **An assistant that is not the source of truth.** It reads the engine's
-  output and explains it. For "what if" questions it calls a tool that runs the
-  real engine. It cannot see your finances at all unless you allow it.
+- **Nothing is guessed.** Insights, alerts, recommendations and the
+  improvement roadmap are all computed from your figures by the same engine,
+  so they are always present and can never disagree with your score.
 
 Everything else — CRUD for income, expenses, savings, debts, goals, assets and
 liabilities; a what-if simulator; an improvement roadmap; emergency-fund,
@@ -74,9 +74,10 @@ Accounts and saved data need a Supabase project.
    | `0001_core.sql` | Extensions, enums, `profiles`, `financial_profiles`, `user_settings`, and the trigger that creates a row in each for every new auth user |
    | `0002_financial_records.sql` | Income, expenses, savings, debts, goals, assets, liabilities, net worth snapshots |
    | `0003_assessments.sql` | Assessments, answers, score history, drafts — and the trigger that makes completed assessments immutable |
-   | `0004_engagement.sql` | Action plans, AI conversations and messages, notifications, milestones, check-ins, simulations |
+   | `0004_engagement.sql` | Action plans, notifications, milestones, check-ins, simulations |
    | `0005_rls.sql` | Row level security and grants on every table |
    | `0006_account_deletion.sql` | The function that lets a user delete their own account |
+   | `0007_remove_ai.sql` | Drops the assistant's tables and columns. A no-op on a fresh install; only matters if you applied an earlier version |
 
    With the Supabase CLI instead:
 
@@ -102,50 +103,13 @@ Accounts and saved data need a Supabase project.
 
 ---
 
-## Setting up the AI assistant
-
-1. Get a key from <https://console.anthropic.com> → API keys.
-2. Put it in `.env.local`:
-
-   ```
-   ANTHROPIC_API_KEY=sk-ant-...
-   ```
-
-`ANTHROPIC_API_KEY` has no `NEXT_PUBLIC_` prefix and is read only in server
-code, so it cannot reach a bundle. Every request goes through an authenticated
-route handler that builds the financial context server-side from the database.
-
-Optional:
-
-| Variable | Default | Purpose |
-|---|---|---|
-| `ANTHROPIC_MODEL` | `claude-opus-5` | The model the assistant runs on |
-| `DEMO_AI_ENABLED` | `true` | Set to `false` to switch off the unauthenticated demo assistant |
-| `DEMO_AI_MESSAGES_PER_HOUR` | `8` | Per-IP cap on the demo assistant |
-
-**Without a key**, the assistant says so plainly and everything else works
-unchanged — insights, alerts, recommendations and the action plan are all
-computed deterministically by the scoring engine, not by a model.
-
-> **A note on the demo assistant.** `/api/ai/demo` is unauthenticated by
-> design, because the demo has no account. It never touches the database, it
-> only ever sees the demo profile's figures, and it is rate limited per IP. It
-> is still a route that spends money on your key: if you deploy publicly and do
-> not want that, set `DEMO_AI_ENABLED=false`.
-
----
-
 ## Environment variables
 
 | Variable | Required | Notes |
 |---|---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | For accounts | Project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | For accounts | Anon public key. Safe in the browser; RLS restricts it |
-| `ANTHROPIC_API_KEY` | For the assistant | **Server only.** Never prefix with `NEXT_PUBLIC_` |
-| `ANTHROPIC_MODEL` | No | Defaults to `claude-opus-5` |
 | `NEXT_PUBLIC_SITE_URL` | Recommended | Absolute origin, for links in auth emails |
-| `DEMO_AI_ENABLED` | No | `false` disables the demo assistant |
-| `DEMO_AI_MESSAGES_PER_HOUR` | No | Per-IP cap for the demo assistant |
 | `TEST_DATABASE_URL` | Tests only | A throwaway PostgreSQL server for `npm run test:db` |
 
 Never commit `.env.local`. It is git-ignored.
@@ -206,8 +170,15 @@ The demo suite needs no credentials: it walks the landing page, the demo
 assessment (including a validation failure and a conditional section), the
 results and transparency table, the simulator, dark mode, mobile layout, and
 the fact that protected routes and API endpoints refuse anonymous callers. It
-also runs axe against seven pages and fails on any serious or critical
+also runs axe against six pages and fails on any serious or critical
 violation.
+
+If Chromium is already on the machine (a preinstalled image, a system package),
+point Playwright at it instead of downloading one:
+
+```sh
+PW_CHROMIUM=/path/to/chrome npm run test:e2e
+```
 
 #### Running the authenticated E2E suite
 
@@ -233,8 +204,7 @@ holding real data.
 Any host that runs Next.js works. On Vercel:
 
 1. Import the repository and set the **root directory** to `meridian`.
-2. Add the environment variables above. `ANTHROPIC_API_KEY` must be a plain
-   (not public) variable.
+2. Add the environment variables above.
 3. Set `NEXT_PUBLIC_SITE_URL` to the deployed origin, and add that origin plus
    `<origin>/auth/confirm` to Supabase's redirect allow-list.
 4. Deploy. The build runs `next build`; there is no separate migration step, so
@@ -242,12 +212,8 @@ Any host that runs Next.js works. On Vercel:
 
 Before going live:
 
-- Apply all six migrations and confirm RLS is on for every table.
+- Apply all seven migrations and confirm RLS is on for every table.
 - Run `npm run test:db` against a copy of the schema.
-- Put a durable rate limiter in front of `/api/ai/chat` and `/api/ai/demo`. The
-  in-process limiter in the route handlers resets on deploy and does not span
-  instances — it is a brake on an obvious loop, not a security control.
-- Decide whether the demo assistant should be on.
 
 ---
 
@@ -260,19 +226,18 @@ app/
   auth/               callback, confirm and sign-out route handlers
   assessment/         the questionnaire
   results/[id]/       results for one completed assessment
-  dashboard/          overview, pillars, data, goals, simulator, AI, history,
+  dashboard/          overview, pillars, data, goals, simulator, history,
                       reports, calculators, check-in, net worth, settings
   demo/               the whole product on example data, no account
-  api/                AI chat, demo AI, data export
+  api/                data export
 components/
   ui/                 shadcn-style primitives on Radix
-  assessment/  score/  dashboard/  charts/  ai/  financial-data/
+  assessment/  score/  dashboard/  charts/  financial-data/
   simulator/  results/  history/  settings/  demo/  marketing/
 lib/
   scoring/            THE ENGINE — pure, versioned, no side effects
   calculations/       derived figures, net worth, goals, debt payoff, scenarios
   assessment/         question set, validation, answer → scoring input
-  ai/                 config, server-side context builder, system prompt, tools
   supabase/           browser and server clients, session refresh
   actions/            server actions
   data/               server-side queries
@@ -291,8 +256,7 @@ tests/
 | A weight or a threshold | `lib/scoring/scoreConfig.ts` |
 | A pillar's formula | `lib/scoring/calculate*Score.ts` |
 | The questions | `lib/assessment/questions.ts` |
-| What the assistant may say | `lib/ai/system-prompt.ts` |
-| What the assistant may see | `lib/ai/context.ts` |
+| The recommendation catalogue | `lib/scoring/generateInsights.ts` |
 | Colours and type | `app/globals.css` |
 
 ### Changing the scoring formulas

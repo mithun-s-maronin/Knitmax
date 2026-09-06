@@ -29,7 +29,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { COUNTRIES, CURRENCIES } from "@/lib/constants";
 import { updatePreferences, updateProfile, deleteAccount } from "@/lib/actions/settings";
-import { deleteAllConversations } from "@/lib/actions/conversations";
 import type { ProfileRow, UserSettingsRow } from "@/types/database";
 
 export function SettingsSection({
@@ -222,62 +221,6 @@ function ToggleRow({
   );
 }
 
-/** The AI data permission and conversation memory (§70, §71). */
-export function PrivacySettings({ settings }: { settings: UserSettingsRow | null }) {
-  const [dataPermission, setDataPermission] = React.useState(
-    settings?.ai_data_permission ?? true,
-  );
-  const [memory, setMemory] = React.useState(settings?.ai_conversation_memory ?? true);
-  const [pending, startTransition] = React.useTransition();
-
-  const update = (values: Record<string, boolean>) => {
-    startTransition(async () => {
-      const result = await updatePreferences(values);
-      if (!result.ok) toast.error(result.error ?? "That did not save.");
-    });
-  };
-
-  return (
-    <div className="divide-y">
-      <ToggleRow
-        id="ai-data-permission"
-        label="Allow the assistant to use my financial data"
-        description="When this is off, none of your figures are sent to the assistant at all — it is not asked to ignore them, it simply never receives them. It can still answer general questions."
-        checked={dataPermission}
-        disabled={pending}
-        onCheckedChange={(value) => {
-          setDataPermission(value);
-          update({ ai_data_permission: value });
-          toast.success(
-            value
-              ? "The assistant can now use your figures."
-              : "The assistant will no longer receive your figures.",
-          );
-        }}
-      />
-
-      <ToggleRow
-        id="ai-memory"
-        label="Remember earlier messages in a conversation"
-        description="Lets the assistant follow a thread across several questions. With this off, each message is answered on its own."
-        checked={memory}
-        disabled={pending}
-        onCheckedChange={(value) => {
-          setMemory(value);
-          update({ ai_conversation_memory: value });
-        }}
-      />
-
-      <p className="flex gap-2.5 pt-4 text-sm text-muted-foreground text-pretty">
-        <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" />
-        Your records are readable only by your own account. Row-level security
-        in the database enforces that, not the app — another signed-in user
-        querying your rows gets nothing back.
-      </p>
-    </div>
-  );
-}
-
 export function NotificationSettings({ settings }: { settings: UserSettingsRow | null }) {
   const [values, setValues] = React.useState({
     notifications_enabled: settings?.notifications_enabled ?? true,
@@ -350,14 +293,6 @@ export function DataSettings({ email }: { email: string | null }) {
   const [confirmation, setConfirmation] = React.useState("");
   const [pending, startTransition] = React.useTransition();
 
-  const clearConversations = () => {
-    startTransition(async () => {
-      const result = await deleteAllConversations();
-      if (result.ok) toast.success("All conversations deleted.");
-      else toast.error(result.error ?? "That did not work.");
-    });
-  };
-
   const confirmDelete = () => {
     startTransition(async () => {
       const result = await deleteAccount(confirmation);
@@ -400,21 +335,12 @@ export function DataSettings({ email }: { email: string | null }) {
         </div>
       </div>
 
-      <div className="border-t pt-6">
-        <h3 className="text-sm font-medium">Delete AI conversations</h3>
-        <p className="mt-1.5 text-sm text-muted-foreground text-pretty">
-          Removes every conversation and message. Your score and financial
-          records are untouched.
-        </p>
-        <Button
-          variant="outline"
-          className="mt-4"
-          onClick={clearConversations}
-          disabled={pending}
-        >
-          Delete all conversations
-        </Button>
-      </div>
+      <p className="flex gap-2.5 border-t pt-6 text-sm text-muted-foreground text-pretty">
+        <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" />
+        Your records are readable only by your own account. Row-level security
+        in the database enforces that, not the app — another signed-in user
+        querying your rows gets nothing back.
+      </p>
 
       <div className="rounded-xl border border-destructive/30 bg-destructive/[0.04] p-5">
         <h3 className="flex items-center gap-2 text-sm font-medium text-destructive-ink">

@@ -103,17 +103,11 @@ create trigger financial_profiles_set_updated_at
 
 -- ---------------------------------------------------------------------------
 -- user_settings
---
--- ai_data_permission is the switch behind §70: when it is false the server-side
--- context builder returns nothing personal, so the assistant literally cannot
--- see the user's finances.
 -- ---------------------------------------------------------------------------
 
 create table if not exists public.user_settings (
   user_id                  uuid primary key references auth.users (id) on delete cascade,
   theme                    meridian_theme not null default 'system',
-  ai_data_permission       boolean not null default true,
-  ai_conversation_memory   boolean not null default true,
   notifications_enabled    boolean not null default true,
   score_change_alerts      boolean not null default true,
   goal_milestone_alerts    boolean not null default true,

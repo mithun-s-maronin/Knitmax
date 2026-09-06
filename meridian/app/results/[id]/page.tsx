@@ -3,10 +3,10 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
   ArrowRight,
-  Bot,
   CalendarCheck,
   ChartLine,
   CircleAlert,
+  Calculator,
   SlidersHorizontal,
 } from "lucide-react";
 
@@ -327,10 +327,10 @@ export default async function ResultsPage({
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           {[
             {
-              href: "/dashboard/ai",
-              icon: Bot,
-              title: "Ask about your score",
-              body: "Have the assistant explain any part of this in your own terms.",
+              href: "/dashboard/calculators",
+              icon: Calculator,
+              title: "Run the numbers",
+              body: "Emergency fund, savings goals and debt payoff, on your own figures.",
             },
             {
               href: "/dashboard/simulator",

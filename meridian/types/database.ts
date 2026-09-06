@@ -124,7 +124,6 @@ export type PillarOrOverall = PillarKey | "overall";
 export type Priority = "high" | "medium" | "low";
 export type ActionHorizon = "immediate" | "short_term" | "long_term";
 export type ActionStatus = "pending" | "completed" | "dismissed";
-export type MessageRole = "user" | "assistant";
 
 export type NotificationType =
   | "alert"
@@ -169,8 +168,6 @@ export type FinancialProfileRow = {
 export type UserSettingsRow = {
   user_id: string;
   theme: ThemePreference;
-  ai_data_permission: boolean;
-  ai_conversation_memory: boolean;
   notifications_enabled: boolean;
   score_change_alerts: boolean;
   goal_milestone_alerts: boolean;
@@ -355,24 +352,6 @@ export type ActionPlanRow = {
   completed_at: string | null;
 }
 
-export type AiConversationRow = {
-  id: string;
-  user_id: string;
-  title: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export type AiMessageRow = {
-  id: string;
-  conversation_id: string;
-  user_id: string;
-  role: MessageRole;
-  content: string;
-  used_financial_context: boolean;
-  created_at: string;
-}
-
 export type NotificationRow = {
   id: string;
   user_id: string;
@@ -431,8 +410,6 @@ export interface Database {
         | "created_at"
         | "updated_at"
         | "theme"
-        | "ai_data_permission"
-        | "ai_conversation_memory"
         | "notifications_enabled"
         | "score_change_alerts"
         | "goal_milestone_alerts"
@@ -521,8 +498,6 @@ export interface Database {
         | "impact_points"
         | "completed_at"
       >;
-      ai_conversations: TableDef<AiConversationRow, Managed | "title">;
-      ai_messages: TableDef<AiMessageRow, "id" | "created_at" | "used_financial_context">;
       notifications: TableDef<
         NotificationRow,
         "id" | "created_at" | "type" | "severity" | "message" | "href" | "dedupe_key" | "read_at"
@@ -560,7 +535,6 @@ export interface Database {
       meridian_priority: Priority;
       meridian_action_horizon: ActionHorizon;
       meridian_action_status: ActionStatus;
-      meridian_message_role: MessageRole;
       meridian_notification_type: NotificationType;
       meridian_severity: Severity;
     };

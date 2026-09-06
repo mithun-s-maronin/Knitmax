@@ -27,8 +27,6 @@ const EXPORTABLE = [
   "milestones",
   "check_ins",
   "notifications",
-  "ai_conversations",
-  "ai_messages",
 ] as const;
 
 type Exportable = (typeof EXPORTABLE)[number];

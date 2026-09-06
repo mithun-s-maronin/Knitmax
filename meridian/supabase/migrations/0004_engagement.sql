@@ -22,10 +22,6 @@ do $$ begin
 exception when duplicate_object then null; end $$;
 
 do $$ begin
-  create type meridian_message_role as enum ('user', 'assistant');
-exception when duplicate_object then null; end $$;
-
-do $$ begin
   create type meridian_notification_type as enum (
     'alert', 'opportunity', 'score_change', 'goal_milestone', 'milestone',
     'checkin_reminder', 'action_completed', 'system'
@@ -75,45 +71,6 @@ drop trigger if exists action_plans_set_updated_at on public.action_plans;
 create trigger action_plans_set_updated_at
   before update on public.action_plans
   for each row execute function public.meridian_set_updated_at();
-
--- ---------------------------------------------------------------------------
--- ai_conversations / ai_messages
--- ---------------------------------------------------------------------------
-
-create table if not exists public.ai_conversations (
-  id         uuid primary key default gen_random_uuid(),
-  user_id    uuid not null references auth.users (id) on delete cascade,
-  title      text not null default 'New conversation',
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-
-  constraint ai_conversations_title_length check (char_length(btrim(title)) between 1 and 200)
-);
-
-create index if not exists ai_conversations_user_idx
-  on public.ai_conversations (user_id, updated_at desc);
-
-drop trigger if exists ai_conversations_set_updated_at on public.ai_conversations;
-create trigger ai_conversations_set_updated_at
-  before update on public.ai_conversations
-  for each row execute function public.meridian_set_updated_at();
-
-create table if not exists public.ai_messages (
-  id              uuid primary key default gen_random_uuid(),
-  conversation_id uuid not null references public.ai_conversations (id) on delete cascade,
-  user_id         uuid not null references auth.users (id) on delete cascade,
-  role            meridian_message_role not null,
-  content         text not null,
-  -- Whether personal financial context was in scope for this turn, so the
-  -- transcript stays honest about what the assistant could see.
-  used_financial_context boolean not null default false,
-  created_at      timestamptz not null default now(),
-
-  constraint ai_messages_content_length check (char_length(content) between 1 and 100000)
-);
-
-create index if not exists ai_messages_conversation_idx
-  on public.ai_messages (conversation_id, created_at asc);
 
 -- ---------------------------------------------------------------------------
 -- notifications — deterministic alerts and milestone notices

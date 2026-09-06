@@ -25,7 +25,6 @@ export default async function SavePage() {
     <PillarPageShell
       pillar={stored?.save ?? null}
       assessedAt={stored ? formatDate(stored.completedAt, "long") : null}
-      askPrompt="Build me a savings plan that gets my emergency fund to six months."
     >
       <section className="mt-9" aria-labelledby="savings-analytics">
         <h2 id="savings-analytics" className="text-lg font-semibold tracking-[-0.015em]">

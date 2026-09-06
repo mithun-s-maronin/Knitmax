@@ -173,26 +173,7 @@ test("11-12. a second assessment is recorded and history keeps both", async ({ p
   await expect(page.getByText(/earlier/i).first()).toBeVisible();
 });
 
-test("13. the assistant refuses to be spoofed and answers or explains why not", async ({
-  page,
-  request,
-}) => {
-  await signIn(page);
-
-  // A conversation the user does not own must not be writable.
-  const response = await request.post("/api/ai/chat", {
-    data: {
-      conversationId: "00000000-0000-4000-8000-000000000000",
-      message: "hello",
-    },
-  });
-  expect([401, 404]).toContain(response.status());
-
-  await page.goto("/dashboard/ai");
-  await expect(page.getByRole("heading", { name: /ask about your money/i })).toBeVisible();
-});
-
-test("14. a goal can be created and tracked", async ({ page }) => {
+test("13. a goal can be created and tracked", async ({ page }) => {
   await signIn(page);
   await page.goto("/dashboard/goals");
 
@@ -206,7 +187,7 @@ test("14. a goal can be created and tracked", async ({ page }) => {
   await expect(page.getByText("25%").first()).toBeVisible();
 });
 
-test("15. the simulator projects a change without saving it", async ({ page }) => {
+test("14. the simulator projects a change without saving it", async ({ page }) => {
   await signIn(page);
   await page.goto("/dashboard/simulator");
 
@@ -231,7 +212,7 @@ test("15. the simulator projects a change without saving it", async ({ page }) =
     .toBeGreaterThanOrEqual(before);
 });
 
-test("16-17. a report renders and the export downloads", async ({ page, request }) => {
+test("15-17. a report renders and the export downloads", async ({ page, request }) => {
   await signIn(page);
 
   await page.goto("/dashboard/reports");

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowRight, Bot, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, Calculator, SlidersHorizontal } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -157,13 +157,13 @@ export function DemoResults() {
           </p>
         </Link>
         <Link
-          href="/demo/ai"
+          href="/demo/assessment"
           className="surface p-5 transition-shadow hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
-          <Bot className="size-5 text-primary" />
-          <p className="mt-3.5 font-semibold">Ask the assistant</p>
+          <Calculator className="size-5 text-primary" />
+          <p className="mt-3.5 font-semibold">Change the answers</p>
           <p className="mt-1.5 text-sm text-muted-foreground text-pretty">
-            Have it explain any part of this in plain terms.
+            Walk the assessment again with different figures.
           </p>
         </Link>
       </div>
@@ -176,7 +176,7 @@ export function DemoResults() {
           </Link>
         </Button>
         <Button asChild size="lg" variant="outline">
-          <Link href="/demo/assessment">Change the answers</Link>
+          <Link href="/demo/simulator">Try a change</Link>
         </Button>
       </div>
     </PageShell>

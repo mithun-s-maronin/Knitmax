@@ -8,7 +8,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader, PageShell } from "@/components/dashboard/page-header";
 import { MetricCard } from "@/components/dashboard/metric-card";
 import { AlertsPanel } from "@/components/dashboard/alerts-panel";
-import { AiInsightPanel } from "@/components/dashboard/ai-insight-panel";
+import { InsightPanel } from "@/components/dashboard/insight-panel";
 import { RecalculatePrompt } from "@/components/dashboard/recalculate-prompt";
 import { ActionPlan } from "@/components/dashboard/action-plan";
 import { PillarScoreCard } from "@/components/score/pillar-score-card";
@@ -202,7 +202,7 @@ export default async function DashboardPage() {
 
       {/* ---- Insight + milestone ---- */}
       <div className="mt-9 grid gap-5 lg:grid-cols-[1.6fr_1fr]">
-        <AiInsightPanel insights={insights} />
+        <InsightPanel insights={insights} />
 
         <div className="space-y-5">
           {recentMilestone ? (

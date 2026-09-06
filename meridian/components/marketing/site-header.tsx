@@ -19,7 +19,7 @@ const LINKS = [
   { href: "#score", label: "The score" },
   { href: "#pillars", label: "Four pillars" },
   { href: "#how", label: "How it works" },
-  { href: "#assistant", label: "AI assistant" },
+  { href: "#insights", label: "Insights" },
   { href: "#faq", label: "FAQ" },
 ];
 

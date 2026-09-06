@@ -33,8 +33,6 @@ alter table public.assessment_answers   enable row level security;
 alter table public.score_history        enable row level security;
 alter table public.assessment_drafts    enable row level security;
 alter table public.action_plans         enable row level security;
-alter table public.ai_conversations     enable row level security;
-alter table public.ai_messages          enable row level security;
 alter table public.notifications        enable row level security;
 alter table public.milestones           enable row level security;
 alter table public.check_ins            enable row level security;
@@ -54,8 +52,8 @@ declare
   full_crud text[] := array[
     'profiles', 'financial_profiles', 'user_settings', 'income_sources', 'expenses',
     'savings_accounts', 'debts', 'financial_goals', 'assets', 'liabilities',
-    'net_worth_snapshots', 'assessment_drafts', 'action_plans', 'ai_conversations',
-    'ai_messages', 'notifications', 'milestones', 'check_ins', 'simulations'
+    'net_worth_snapshots', 'assessment_drafts', 'action_plans',
+    'notifications', 'milestones', 'check_ins', 'simulations'
   ];
   append_only text[] := array['assessments', 'assessment_answers', 'score_history'];
   t text;
@@ -95,8 +93,6 @@ declare
     ['net_worth_snapshots', 'user_id'],
     ['assessment_drafts', 'user_id'],
     ['action_plans', 'user_id'],
-    ['ai_conversations', 'user_id'],
-    ['ai_messages', 'user_id'],
     ['notifications', 'user_id'],
     ['milestones', 'user_id'],
     ['check_ins', 'user_id'],
@@ -159,17 +155,6 @@ end $$;
 -- belong to the caller, otherwise a user could attach a message to somebody
 -- else's conversation.
 -- ---------------------------------------------------------------------------
-
-drop policy if exists ai_messages_insert_own on public.ai_messages;
-create policy ai_messages_insert_own on public.ai_messages
-  for insert to authenticated
-  with check (
-    user_id = (select auth.uid())
-    and exists (
-      select 1 from public.ai_conversations c
-      where c.id = conversation_id and c.user_id = (select auth.uid())
-    )
-  );
 
 drop policy if exists assessment_answers_insert_own on public.assessment_answers;
 create policy assessment_answers_insert_own on public.assessment_answers

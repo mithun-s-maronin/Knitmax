@@ -2,14 +2,13 @@ import "server-only";
 
 import { formatCurrency, formatMonths, formatPercent } from "@/lib/format";
 import type { StoredAssessmentResult } from "@/lib/scoring";
-import type { DashboardInsight } from "@/components/dashboard/ai-insight-panel";
+import type { DashboardInsight } from "@/components/dashboard/insight-panel";
 
 /**
  * Builds the dashboard insights from the stored score (§28, §73).
  *
- * Deterministic on purpose: these appear whether or not the AI assistant is
- * configured, and they can never disagree with the score, because they are
- * read from it.
+ * Read straight out of the stored result, so they can never disagree with the
+ * score and never need anything external to produce.
  */
 export function buildDashboardInsights(
   result: StoredAssessmentResult,
@@ -36,7 +35,8 @@ export function buildDashboardInsights(
             worstComponent.metric.target ? `, against a target of ${worstComponent.metric.target}` : ""
           }. It carries ${Math.round(worstComponent.effectiveWeight * 100)}% of this pillar, and ${weakest.label} is ${Math.round(weakest.weight * 100)}% of your overall score.`
         : weakest.description,
-      prompt: `Why is my ${weakest.label} score ${weakest.score}, and what would improve it fastest?`,
+      href: `/dashboard/${weakest.key}`,
+      hrefLabel: `Look at ${weakest.label}`,
     });
   }
 
@@ -47,7 +47,8 @@ export function buildDashboardInsights(
       key: "best_action",
       headline: `${best.title} — worth about ${best.estimatedImpact} points.`,
       detail: `${best.description} That figure comes from re-running the scoring engine with the change applied, not from an estimate.`,
-      prompt: `Help me plan how to do this: ${best.title}`,
+      href: "/dashboard/simulator",
+      hrefLabel: "See what it is worth",
     });
   }
 
@@ -63,10 +64,8 @@ export function buildDashboardInsights(
         m.disposableIncome < 0
           ? `Living costs take ${formatPercent(m.expenseRatio, 0)} of your income and repayments take another ${formatPercent(m.debtPaymentRatio, 0)}. Closing this gap comes before anything else.`
           : `You save ${formatPercent(m.savingsRate, 1)} of your income and your emergency fund covers ${formatMonths(m.emergencyFundMonths)} of essential costs.`,
-      prompt:
-        m.disposableIncome < 0
-          ? "My expenses exceed my income. Walk me through how to close the gap."
-          : "Analyse my spending and tell me where the easiest savings are.",
+      href: "/dashboard/spend",
+      hrefLabel: "Break down my spending",
     });
   }
 

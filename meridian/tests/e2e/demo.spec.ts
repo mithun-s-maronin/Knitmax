@@ -235,13 +235,6 @@ test.describe("protected routes", () => {
     expect(response?.status()).toBeLessThan(500);
   });
 
-  test("the authenticated AI endpoint refuses an anonymous caller", async ({ request }) => {
-    const response = await request.post("/api/ai/chat", {
-      data: { message: "What is my score?" },
-    });
-    expect(response.status()).toBe(401);
-  });
-
   test("the export endpoint refuses an anonymous caller", async ({ request }) => {
     const response = await request.get("/api/export?format=json");
     expect(response.status()).toBe(401);

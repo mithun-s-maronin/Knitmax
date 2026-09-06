@@ -23,7 +23,6 @@ export default async function BorrowPage() {
     <PillarPageShell
       pillar={stored?.borrow ?? null}
       assessedAt={stored ? formatDate(stored.completedAt, "long") : null}
-      askPrompt="Help me plan the fastest way to pay down my debt."
     >
       <section className="mt-9" aria-labelledby="debt-dashboard">
         <h2 id="debt-dashboard" className="text-lg font-semibold tracking-[-0.015em]">

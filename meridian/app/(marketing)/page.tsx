@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import {
   ArrowRight,
   BadgeCheck,
-  Bot,
   CalendarCheck,
   ChartLine,
   CreditCard,
@@ -14,6 +13,7 @@ import {
   SlidersHorizontal,
   Sparkles,
   Target,
+  TrendingUp,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -107,7 +107,7 @@ const FEATURES = [
   {
     icon: Sparkles,
     title: "Insights that name the actual problem",
-    body: "Not \"consider saving more\" — the specific number that is holding your score down, why it matters, and what moving it would be worth.",
+    body: "The specific number that is holding your score down, why it matters, and what moving it would be worth.",
   },
   {
     icon: Target,
@@ -166,10 +166,6 @@ const FAQ = [
   {
     q: "What if a question does not apply to me?",
     a: "It is excluded rather than scored zero, and the remaining weights are scaled up to fill the gap. Someone with no car is not marked down for having no vehicle insurance, and a profile with no income recorded reports insufficient data rather than a made-up ratio.",
-  },
-  {
-    q: "Does the AI assistant decide my score?",
-    a: "Never. Scores come only from the deterministic engine. The assistant reads the results and explains them, and when it needs a number for a what-if it calls the same engine rather than estimating. It also cannot see your finances at all unless you leave that permission switched on.",
   },
   {
     q: "What happens to old assessments?",
@@ -363,28 +359,28 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ----------------------------------------------------------- Assistant */}
-      <section id="assistant" className="scroll-mt-20 border-t">
+      {/* ------------------------------------------------------------ Insights */}
+      <section id="insights" className="scroll-mt-20 border-t">
         <div className="mx-auto grid w-full max-w-6xl gap-12 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-2 lg:items-center">
           <Reveal>
             <Badge variant="muted" className="mb-5">
-              <Bot className="size-3.5" />
-              AI assistant
+              <Sparkles className="size-3.5" />
+              Insights and a plan
             </Badge>
             <h2 className="max-w-[18ch] text-balance text-3xl font-semibold tracking-[-0.025em] sm:text-4xl">
-              An assistant that explains, and never invents.
+              It tells you what is wrong, and what it is worth fixing.
             </h2>
             <p className="mt-5 text-lg text-muted-foreground text-pretty">
-              Ask why your Save score is 48, what to pay off first, or what your
-              dashboard is telling you. The assistant reads your actual figures
-              — with your permission — and when a question needs a number it
-              calls the scoring engine rather than guessing.
+              Not &ldquo;consider saving more&rdquo;. The specific component
+              that is holding your score down, the number behind it, and what
+              moving it would actually be worth — measured by re-running the
+              scoring engine with the change applied.
             </p>
             <ul className="mt-7 space-y-3">
               {[
-                "It cannot see your finances unless you allow it, and you can switch that off at any time.",
-                "It never produces an official score, score change or projected impact of its own.",
-                "Your conversations are saved to your account, and you can delete any of them.",
+                "Every point figure is calculated, never estimated. Changes that cannot be modelled carry no number at all.",
+                "Actions are split by horizon — this week, this quarter, this year — and the plan remembers what you have done.",
+                "The alerts that matter are computed from your figures, so they are always there and always agree with your score.",
               ].map((item) => (
                 <li key={item} className="flex gap-3 text-muted-foreground text-pretty">
                   <BadgeCheck className="mt-0.5 size-4.5 shrink-0 text-primary" />
@@ -397,27 +393,42 @@ export default function LandingPage() {
           <Reveal delay={0.12}>
             <div className="surface-raised overflow-hidden">
               <div className="flex items-center gap-2 border-b bg-muted/40 px-5 py-3">
-                <Bot className="size-4 text-primary" />
-                <span className="text-sm font-medium">Meridian assistant</span>
+                <Target className="size-4 text-primary" />
+                <span className="text-sm font-medium">Path to a better score</span>
+                <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-score-excellent/12 px-2.5 py-0.5 text-xs font-medium text-score-excellent-ink">
+                  <TrendingUp className="size-3" />
+                  +11 points
+                </span>
               </div>
-              <div className="space-y-4 p-5 text-sm">
-                <p className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-sm bg-primary px-4 py-2.5 text-primary-foreground">
-                  Why is my Save score only 48?
-                </p>
-                <div className="max-w-[92%] rounded-2xl rounded-bl-sm bg-muted px-4 py-3 text-foreground/90">
-                  <p className="text-pretty">
-                    Two of the three components are pulling it down. Your
-                    emergency fund covers 3.0 months of essential costs, which
-                    scores 50 out of 100 against the six-month target, and it
-                    carries the heaviest weight in this pillar at 45%. Your
-                    savings rate of 10% scores 50 as well.
-                  </p>
-                  <p className="mt-3 text-pretty">
-                    Saving consistently every month is already at full marks.
-                    Getting the fund to six months would be worth the most.
-                  </p>
-                </div>
-              </div>
+              <ol className="divide-y">
+                {[
+                  ["Grow your emergency fund to three months", "62", "69", "+7"],
+                  ["Deal with your high-interest debt first", "69", "72", "+3"],
+                  ["Make saving automatic rather than a decision", "72", "73", "+1"],
+                ].map(([title, from, to, gain], i) => (
+                  <li key={title} className="flex gap-4 p-5">
+                    <span
+                      aria-hidden
+                      className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/12 text-xs font-semibold text-primary"
+                    >
+                      {i + 1}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-pretty">{title}</p>
+                      <p className="mt-1.5 flex items-center gap-2 text-xs tabular text-muted-foreground">
+                        {from}
+                        <ArrowRight className="size-3" aria-hidden />
+                        <span className="font-medium text-score-excellent-ink">{to}</span>
+                        <span className="text-score-excellent-ink">{gain}</span>
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <p className="border-t bg-muted/30 px-5 py-3 text-xs text-muted-foreground text-pretty">
+                Each step is measured with the one above it already applied, so
+                the gains add up rather than counting the same ground twice.
+              </p>
             </div>
           </Reveal>
         </div>

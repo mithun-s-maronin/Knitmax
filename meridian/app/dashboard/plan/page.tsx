@@ -25,7 +25,6 @@ export default async function PlanPage() {
     <PillarPageShell
       pillar={stored?.plan ?? null}
       assessedAt={stored ? formatDate(stored.completedAt, "long") : null}
-      askPrompt="Help me turn my intentions into financial goals with real numbers."
     >
       <section className="mt-9" aria-labelledby="goals-heading">
         <div className="flex flex-wrap items-baseline justify-between gap-3">

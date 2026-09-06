@@ -60,8 +60,6 @@ export async function updateProfile(input: unknown): Promise<SettingsResult> {
 }
 
 const preferencesSchema = z.object({
-  ai_data_permission: z.boolean().optional(),
-  ai_conversation_memory: z.boolean().optional(),
   notifications_enabled: z.boolean().optional(),
   score_change_alerts: z.boolean().optional(),
   goal_milestone_alerts: z.boolean().optional(),
@@ -69,7 +67,7 @@ const preferencesSchema = z.object({
   theme: z.enum(["light", "dark", "system"]).optional(),
 });
 
-/** Updates one or more preference switches, including the AI data permission (§70). */
+/** Updates one or more preference switches. */
 export async function updatePreferences(input: unknown): Promise<SettingsResult> {
   const user = await requireUser();
 

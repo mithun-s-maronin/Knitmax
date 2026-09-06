@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Bot, Sparkles } from "lucide-react";
+import { Lightbulb, Sparkles } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -9,19 +9,18 @@ export interface DashboardInsight {
   key: string;
   headline: string;
   detail: string;
-  /** The question the "Ask about this" button opens the assistant with. */
-  prompt: string;
+  /** Where to go to act on this. */
+  href: string;
+  hrefLabel: string;
 }
 
 /**
  * The dashboard insight panel (§28).
  *
- * The insight itself is derived from the scoring engine, not written by a
- * model, so it is always present and always consistent with the score. The
- * assistant's role is to expand on it when asked, which is what the button
- * does — it opens the chat with this exact question.
+ * Everything here is derived from the scoring engine, so it is always present,
+ * always consistent with the score, and needs nothing external to produce.
  */
-export function AiInsightPanel({
+export function InsightPanel({
   insights,
   className,
 }: {
@@ -36,11 +35,11 @@ export function AiInsightPanel({
         "rounded-2xl border border-primary/20 bg-primary/[0.045] p-5 sm:p-6",
         className,
       )}
-      aria-labelledby="ai-insight-heading"
+      aria-labelledby="insight-heading"
     >
       <div className="flex items-center gap-2">
-        <Bot className="size-4.5 text-primary" />
-        <h2 id="ai-insight-heading" className="font-semibold">
+        <Lightbulb className="size-4.5 text-primary" />
+        <h2 id="insight-heading" className="font-semibold">
           Financial insight
         </h2>
         <Badge variant="muted" className="ml-auto">
@@ -57,12 +56,7 @@ export function AiInsightPanel({
               {insight.detail}
             </p>
             <Button asChild variant="outline" size="sm" className="mt-3 bg-background">
-              <Link
-                href={`/dashboard/ai?prompt=${encodeURIComponent(insight.prompt)}`}
-              >
-                <Bot className="size-3.5" />
-                Ask AI about this
-              </Link>
+              <Link href={insight.href}>{insight.hrefLabel}</Link>
             </Button>
           </li>
         ))}

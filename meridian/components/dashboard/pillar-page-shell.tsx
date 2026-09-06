@@ -14,12 +14,10 @@ import type { PillarResult } from "@/lib/scoring";
 export function PillarPageShell({
   pillar,
   assessedAt,
-  askPrompt,
   children,
 }: {
   pillar: PillarResult | null;
   assessedAt: string | null;
-  askPrompt: string;
   children?: React.ReactNode;
 }) {
   if (!pillar) {
@@ -50,9 +48,7 @@ export function PillarPageShell({
         description={pillar.description}
         actions={
           <Button asChild variant="outline">
-            <Link href={`/dashboard/ai?prompt=${encodeURIComponent(askPrompt)}`}>
-              Ask about this
-            </Link>
+            <Link href="/dashboard/simulator">See what a change would do</Link>
           </Button>
         }
       />

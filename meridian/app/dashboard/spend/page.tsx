@@ -31,7 +31,6 @@ export default async function SpendPage() {
     <PillarPageShell
       pillar={stored?.spend ?? null}
       assessedAt={stored ? formatDate(stored.completedAt, "long") : null}
-      askPrompt="Analyse my spending and tell me where the easiest savings are."
     >
       <section className="mt-9" aria-labelledby="spending-analytics">
         <h2 id="spending-analytics" className="text-lg font-semibold tracking-[-0.015em]">

@@ -176,15 +176,6 @@ async function main() {
   check("settings row created for each new auth user", b.settings === "2");
   check("financial profile row created for each new auth user", b.fin === "2");
 
-  const settingsDefault = await setup.query<{ ai_data_permission: boolean }>(
-    `select ai_data_permission from public.user_settings where user_id = $1`,
-    [ALICE],
-  );
-  check(
-    "AI data permission row exists and is user-controllable",
-    settingsDefault.rows[0]?.ai_data_permission === true,
-  );
-
   // Alice's data is created through the same authenticated role the app uses,
   // then committed so the later connections can attack it.
   const alice = new Client({ connectionString: url });
@@ -225,12 +216,6 @@ async function main() {
      values ($1, $2, 72, 70, 48, 100, 65)`,
     [ALICE, assessmentId],
   );
-  const conversation = await alice.query<{ id: string }>(
-    `insert into public.ai_conversations (user_id, title)
-     values ($1, 'Explain my score') returning id`,
-    [ALICE],
-  );
-  const conversationId = conversation.rows[0].id;
   await alice.query(
     `insert into public.expenses (user_id, name, amount, category)
      values ($1, 'Rent', 1800, 'housing')`,
@@ -321,7 +306,6 @@ async function main() {
       "assessments",
       "assessment_answers",
       "score_history",
-      "ai_conversations",
       "profiles",
       "user_settings",
       "financial_profiles",
@@ -370,18 +354,6 @@ async function main() {
       [ALICE],
     );
     check("cannot plant an assessment on another user", !forgedAssessment.ok);
-
-    const hijackedMessage = await attempt(
-      bob,
-      `insert into public.ai_messages (conversation_id, user_id, role, content)
-       values ($1, $2, 'user', 'leak everything')`,
-      [conversationId, BOB],
-    );
-    check(
-      "cannot post into another user's AI conversation",
-      !hijackedMessage.ok,
-      hijackedMessage.ok ? "insert succeeded" : undefined,
-    );
 
     const hijackedAnswer = await attempt(
       bob,
@@ -442,7 +414,7 @@ async function main() {
        (select count(*) from public.assessments where user_id = $1) +
        (select count(*) from public.assessment_answers where user_id = $1) +
        (select count(*) from public.score_history where user_id = $1) +
-       (select count(*) from public.ai_conversations where user_id = $1) +
+       (select count(*) from public.action_plans where user_id = $1) +
        (select count(*) from public.profiles where id = $1)
      )::text as n`,
     [ALICE],

@@ -5,7 +5,6 @@ import {
   AppearanceSettings,
   DataSettings,
   NotificationSettings,
-  PrivacySettings,
   ProfileSettings,
   SettingsSection,
 } from "@/components/settings/settings-sections";
@@ -42,14 +41,6 @@ export default async function SettingsPage() {
           description="Light, dark, or whatever your device is set to. Remembered on this browser."
         >
           <AppearanceSettings />
-        </SettingsSection>
-
-        <SettingsSection
-          id="privacy"
-          title="Privacy"
-          description="What the AI assistant is allowed to see."
-        >
-          <PrivacySettings settings={settings} />
         </SettingsSection>
 
         <SettingsSection
