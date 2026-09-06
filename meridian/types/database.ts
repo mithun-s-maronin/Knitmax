@@ -535,7 +535,13 @@ export interface Database {
       >;
     };
     Views: { [_ in never]: never };
-    Functions: { [_ in never]: never };
+    Functions: {
+      /** Deletes the calling user and everything that cascades from them. */
+      meridian_delete_account: {
+        Args: Record<string, never>;
+        Returns: undefined;
+      };
+    };
     Enums: {
       meridian_frequency: Frequency;
       meridian_employment_status: EmploymentStatus;

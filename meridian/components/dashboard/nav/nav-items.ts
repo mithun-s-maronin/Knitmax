@@ -12,6 +12,9 @@ import {
   Settings,
   SlidersHorizontal,
   Target,
+  Calculator,
+  CalendarClock,
+  Scale,
   type LucideIcon,
 } from "lucide-react";
 
@@ -44,6 +47,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: "/dashboard/save", label: "Save", icon: PiggyBank },
       { href: "/dashboard/borrow", label: "Borrow", icon: CreditCard },
       { href: "/dashboard/plan", label: "Plan", icon: CalendarCheck },
+      { href: "/dashboard/net-worth", label: "Net worth", icon: Scale },
     ],
   },
   {
@@ -51,12 +55,14 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: "/dashboard/goals", label: "Goals", icon: Target, primary: true },
       { href: "/dashboard/simulator", label: "Simulator", icon: SlidersHorizontal },
+      { href: "/dashboard/calculators", label: "Calculators", icon: Calculator },
       { href: "/dashboard/ai", label: "AI assistant", icon: Bot, primary: true },
     ],
   },
   {
     label: "Records",
     items: [
+      { href: "/dashboard/check-in", label: "Monthly check-in", icon: CalendarClock },
       { href: "/dashboard/history", label: "History", icon: ChartLine },
       { href: "/dashboard/reports", label: "Reports", icon: FileText },
       { href: "/dashboard/settings", label: "Settings", icon: Settings },

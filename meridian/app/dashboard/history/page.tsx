@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, ChartLine, GitCompare } from "lucide-react";
+import { ArrowRight, ChartLine, GitCompare, Trophy } from "lucide-react";
 
 import { PageHeader, PageShell } from "@/components/dashboard/page-header";
 import { Button } from "@/components/ui/button";
@@ -118,6 +118,33 @@ export default async function HistoryPage() {
           )}
           . A trend line appears once there is more than one reading.
         </p>
+      ) : null}
+
+      {view.milestones.length > 0 ? (
+        <section className="mt-9" aria-labelledby="milestones-heading">
+          <h2 id="milestones-heading" className="text-lg font-semibold tracking-[-0.015em]">
+            Milestones
+          </h2>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            Reached once, and kept.
+          </p>
+          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+            {view.milestones.map((milestone) => (
+              <li key={milestone.id} className="surface flex gap-3 p-4">
+                <Trophy className="mt-0.5 size-4 shrink-0 text-score-excellent" />
+                <div className="min-w-0">
+                  <p className="font-medium">{milestone.title}</p>
+                  <p className="mt-0.5 text-sm text-muted-foreground text-pretty">
+                    {milestone.description}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {formatDate(milestone.achieved_at, "long")}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
       ) : null}
 
       <section className="mt-9" aria-labelledby="assessments-heading">

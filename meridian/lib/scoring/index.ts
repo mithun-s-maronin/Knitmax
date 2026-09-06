@@ -43,7 +43,14 @@ export {
   reviewHabitScore,
 } from "./calculatePlanScore";
 export { calculateOverallScore, deriveMetrics, computeCore } from "./calculateOverallScore";
-export { generateRecommendations, generateAlerts, generateInsights } from "./generateInsights";
+export {
+  generateRecommendations,
+  generateAlerts,
+  generateInsights,
+  buildRoadmap,
+  type Roadmap,
+  type RoadmapStep,
+} from "./generateInsights";
 export { readStoredResult, type StoredAssessmentResult } from "./fromStored";
 export type { CoreResult };
 

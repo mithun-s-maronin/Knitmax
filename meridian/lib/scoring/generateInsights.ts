@@ -450,3 +450,94 @@ export function generateInsights(core: CoreResult, recommendations: Recommendati
 
   return { strengths, improvements, actions };
 }
+
+export interface RoadmapStep {
+  key: string;
+  title: string;
+  description: string;
+  pillar: Recommendation["pillar"];
+  priority: Priority;
+  /** The overall score before this step. */
+  from: number;
+  /** The overall score after it, with every earlier step already applied. */
+  to: number;
+  gain: number;
+}
+
+export interface Roadmap {
+  currentScore: number;
+  projectedScore: number;
+  targetScore: number;
+  reachesTarget: boolean;
+  steps: RoadmapStep[];
+}
+
+/**
+ * The path to a better score (§30).
+ *
+ * Steps are applied cumulatively — each one's gain is measured against the
+ * input with every earlier step already in place, so the numbers add up to the
+ * projected total instead of double-counting overlapping changes. Every figure
+ * comes from re-running the engine.
+ */
+export function buildRoadmap(
+  input: ScoringInput,
+  core: CoreResult,
+  targetScore?: number,
+): Roadmap {
+  const target =
+    targetScore ?? Math.min(core.overallScore + 10, 100);
+
+  let working = input;
+  let workingCore = core;
+  const steps: RoadmapStep[] = [];
+  const used = new Set<string>();
+
+  // Greedy: at each stage take whichever remaining change is worth the most
+  // right now. Recomputing after every step is what keeps the totals honest.
+  for (let i = 0; i < 8; i += 1) {
+    let best: { candidate: Candidate; next: ScoringInput; nextCore: CoreResult; gain: number } | null =
+      null;
+
+    for (const candidate of CANDIDATES) {
+      if (used.has(candidate.key)) continue;
+      if (!candidate.adjust) continue;
+      if (!candidate.when(workingCore.metrics, workingCore, working)) continue;
+
+      const next = candidate.adjust(working, workingCore.metrics);
+      const nextCore = computeCore(next);
+      const gain = nextCore.overallScore - workingCore.overallScore;
+
+      if (gain > 0 && (!best || gain > best.gain)) {
+        best = { candidate, next, nextCore, gain };
+      }
+    }
+
+    if (!best) break;
+
+    steps.push({
+      key: best.candidate.key,
+      title: best.candidate.title,
+      description: best.candidate.description,
+      pillar: best.candidate.pillar,
+      priority: best.candidate.priority,
+      from: workingCore.overallScore,
+      to: best.nextCore.overallScore,
+      gain: best.gain,
+    });
+
+    used.add(best.candidate.key);
+    working = best.next;
+    workingCore = best.nextCore;
+
+    if (workingCore.overallScore >= target) break;
+  }
+
+  return {
+    currentScore: core.overallScore,
+    projectedScore: workingCore.overallScore,
+    targetScore: target,
+    reachesTarget: workingCore.overallScore >= target,
+    steps,
+  };
+}

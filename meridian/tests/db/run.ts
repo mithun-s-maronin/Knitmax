@@ -408,6 +408,29 @@ async function main() {
     check("anonymous role cannot write financial records", !ins.ok);
   });
 
+  section("Account deletion");
+  await asUser(url, BOB, async (bob) => {
+    // The function takes no arguments, so a caller can only ever delete
+    // themselves — there is no id to substitute.
+    const signature = await bob.query<{ n: string }>(
+      `select count(*)::text as n from pg_proc p
+        join pg_namespace ns on ns.oid = p.pronamespace
+        where ns.nspname = 'public'
+          and p.proname = 'meridian_delete_account'
+          and p.pronargs = 0
+          and p.prosecdef`,
+    );
+    check(
+      "delete_account is a zero-argument SECURITY DEFINER function",
+      signature.rows[0].n === "1",
+    );
+  });
+
+  await asUser(url, null, async (anon) => {
+    const res = await attempt(anon, `select public.meridian_delete_account()`);
+    check("anonymous role cannot call delete_account", !res.ok);
+  });
+
   section("Account deletion cascades");
   const cleanup = new Client({ connectionString: url });
   await cleanup.connect();

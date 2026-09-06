@@ -86,3 +86,34 @@ export async function updatePreferences(input: unknown): Promise<SettingsResult>
   revalidatePath("/dashboard", "layout");
   return { ok: true, message: "Saved." };
 }
+
+/**
+ * Deletes the account and everything in it (§49).
+ *
+ * The heavy lifting is a SECURITY DEFINER function that removes the caller's
+ * own auth user; every table cascades from there. It takes no arguments, so
+ * there is no id for a caller to substitute for somebody else's.
+ */
+export async function deleteAccount(confirmation: string): Promise<SettingsResult> {
+  const user = await requireUser();
+
+  // A deliberate, typed confirmation rather than a single click.
+  if (confirmation.trim().toUpperCase() !== "DELETE") {
+    return { ok: false, error: 'Type DELETE to confirm.' };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("meridian_delete_account");
+
+  if (error) {
+    return {
+      ok: false,
+      error:
+        "We could not delete your account. Nothing has been removed — please try again.",
+    };
+  }
+
+  await supabase.auth.signOut();
+  revalidatePath("/", "layout");
+  return { ok: true, message: `Account ${user.email ?? ""} deleted.` };
+}

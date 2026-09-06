@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import {
   PILLAR_WEIGHTS,
+  buildRoadmap,
   calculateOverallScore,
+  computeCore,
   getScoreStatus,
   scoreFinancialHealth,
 } from "@/lib/scoring";
@@ -272,5 +274,76 @@ describe("recommendation impact", () => {
     expect(result.overallScore).toBe(100);
     expect(result.recommendations).toHaveLength(0);
     expect(result.alerts).toHaveLength(0);
+  });
+});
+
+describe("improvement roadmap", () => {
+  const stretched = input({
+    monthlyIncome: 4000,
+    monthlyExpenses: 3000,
+    essentialMonthlyExpenses: 2400,
+    monthlyDebtPayments: 600,
+    monthlySavings: 80,
+    emergencyFundAmount: 600,
+    totalSavings: 600,
+    totalDebt: 14000,
+    highInterestDebt: 9000,
+    billPayment: "usually",
+    savingsConsistency: "occasionally",
+    goals: "general",
+    insuranceApplicable: ["health", "vehicle"],
+    insuranceCovered: ["health"],
+    longTermPlanning: "thinking_about_it",
+    reviewHabit: "rarely",
+  });
+
+  it("produces steps whose cumulative gains reconstruct the projected score", () => {
+    const core = computeCore(stretched);
+    const roadmap = buildRoadmap(stretched, core);
+
+    expect(roadmap.steps.length).toBeGreaterThan(0);
+    expect(roadmap.currentScore).toBe(core.overallScore);
+
+    // Each step starts where the previous one finished.
+    let cursor = roadmap.currentScore;
+    for (const step of roadmap.steps) {
+      expect(step.from).toBe(cursor);
+      expect(step.to).toBe(step.from + step.gain);
+      expect(step.gain).toBeGreaterThan(0);
+      cursor = step.to;
+    }
+    expect(cursor).toBe(roadmap.projectedScore);
+  });
+
+  it("takes the most valuable remaining step at each stage", () => {
+    const core = computeCore(stretched);
+    const roadmap = buildRoadmap(stretched, core);
+    // Greedy ordering: no later step can be worth more at the point the
+    // earlier one was chosen, which shows up as non-increasing gains.
+    const gains = roadmap.steps.map((s) => s.gain);
+    expect([...gains].sort((a, b) => b - a)).toEqual(gains);
+  });
+
+  it("stops once the target is reached", () => {
+    const core = computeCore(stretched);
+    const roadmap = buildRoadmap(stretched, core, core.overallScore + 5);
+    expect(roadmap.reachesTarget).toBe(true);
+    expect(roadmap.projectedScore).toBeGreaterThanOrEqual(core.overallScore + 5);
+  });
+
+  it("offers no steps to a profile already at 100", () => {
+    const perfectInput = input({
+      ...excellentAnswers(),
+      monthlyIncome: 9000,
+      monthlyExpenses: 3000,
+      essentialMonthlyExpenses: 2000,
+      monthlySavings: 2500,
+      emergencyFundAmount: 30000,
+      totalSavings: 90000,
+      totalDebt: 0,
+    });
+    const roadmap = buildRoadmap(perfectInput, computeCore(perfectInput));
+    expect(roadmap.steps).toHaveLength(0);
+    expect(roadmap.projectedScore).toBe(100);
   });
 });
