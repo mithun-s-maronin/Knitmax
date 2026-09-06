@@ -6,13 +6,13 @@ import type { Insight } from "@/lib/scoring";
 const KIND_STYLES = {
   strength: {
     icon: CircleCheck,
-    tone: "text-score-excellent",
+    tone: "text-score-excellent-ink",
     ring: "border-score-excellent/25 bg-score-excellent/[0.07]",
     heading: "Strengths",
   },
   improvement: {
     icon: CircleAlert,
-    tone: "text-score-needs-improvement",
+    tone: "text-score-needs-improvement-ink",
     ring: "border-score-fair/30 bg-score-fair/[0.08]",
     heading: "Areas to improve",
   },

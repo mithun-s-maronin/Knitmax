@@ -55,9 +55,9 @@ export function ScoreComparison({
           className={cn(
             "mt-6 flex items-center justify-center gap-2 text-lg font-semibold",
             overallDelta > 0
-              ? "text-score-excellent"
+              ? "text-score-excellent-ink"
               : overallDelta < 0
-                ? "text-destructive"
+                ? "text-destructive-ink"
                 : "text-muted-foreground",
           )}
         >
@@ -97,8 +97,8 @@ export function ScoreComparison({
                   delta === null || delta === 0
                     ? "text-muted-foreground"
                     : delta > 0
-                      ? "text-score-excellent"
-                      : "text-destructive",
+                      ? "text-score-excellent-ink"
+                      : "text-destructive-ink",
                 )}
               >
                 {delta === null ? "—" : delta === 0 ? "0" : `${delta > 0 ? "+" : ""}${delta}`}

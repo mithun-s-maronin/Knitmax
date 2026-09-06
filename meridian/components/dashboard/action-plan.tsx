@@ -34,8 +34,8 @@ const HORIZONS = [
 ];
 
 const PRIORITY_TONE = {
-  high: "text-destructive",
-  medium: "text-score-needs-improvement",
+  high: "text-destructive-ink",
+  medium: "text-score-needs-improvement-ink",
   low: "text-muted-foreground",
 } as const;
 
@@ -130,7 +130,7 @@ export function ActionPlan({ actions }: { actions: ActionPlanRow[] }) {
                             : "Low priority"}
                       </span>
                       {action.impact_points !== null ? (
-                        <span className="text-score-excellent">
+                        <span className="text-score-excellent-ink">
                           +{Math.round(Number(action.impact_points))} points to your score
                         </span>
                       ) : null}
@@ -170,7 +170,7 @@ export function ActionPlan({ actions }: { actions: ActionPlanRow[] }) {
                   key={action.id}
                   className="flex items-center gap-3 rounded-xl border border-dashed p-3.5"
                 >
-                  <Check className="size-4 shrink-0 text-score-excellent" />
+                  <Check className="size-4 shrink-0 text-score-excellent-ink" />
                   <span className="min-w-0 flex-1 text-sm text-muted-foreground line-through">
                     {action.title}
                   </span>

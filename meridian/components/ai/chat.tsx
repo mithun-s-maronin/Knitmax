@@ -343,7 +343,7 @@ export function Chat({
               <li key={i}>
                 <Badge
                   variant="outline"
-                  className="border-score-excellent/35 text-score-excellent"
+                  className="border-score-excellent/35 text-score-excellent-ink"
                 >
                   <TrendingUp className="size-3" />
                   Measured by the engine: {simulation.description} ={" "}

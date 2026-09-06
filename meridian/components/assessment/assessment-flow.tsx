@@ -57,9 +57,9 @@ interface LocalDraft {
   updatedAt: string;
 }
 
-function readLocalDraft(): LocalDraft | null {
+function readLocalDraft(key: string): LocalDraft | null {
   try {
-    const raw = window.localStorage.getItem(LOCAL_KEY);
+    const raw = window.localStorage.getItem(key);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as LocalDraft;
     if (!parsed || typeof parsed !== "object" || !parsed.answers) return null;
@@ -69,18 +69,18 @@ function readLocalDraft(): LocalDraft | null {
   }
 }
 
-function writeLocalDraft(draft: LocalDraft) {
+function writeLocalDraft(key: string, draft: LocalDraft) {
   try {
-    window.localStorage.setItem(LOCAL_KEY, JSON.stringify(draft));
+    window.localStorage.setItem(key, JSON.stringify(draft));
   } catch {
     // A private window or a full quota. The server copy is authoritative
     // anyway, so this is a resilience bonus rather than a requirement.
   }
 }
 
-function clearLocalDraft() {
+function clearLocalDraft(key: string) {
   try {
-    window.localStorage.removeItem(LOCAL_KEY);
+    window.localStorage.removeItem(key);
   } catch {
     /* ignore */
   }
@@ -100,11 +100,29 @@ export function AssessmentFlow({
   initialStep,
   initialRevision,
   hasServerDraft,
+  onSaveDraft = saveDraft,
+  onSubmit = submitAssessment,
+  exitHref = "/dashboard",
+  storageKey = LOCAL_KEY,
 }: {
   initialAnswers: AnswerMap;
   initialStep: number;
   initialRevision: number;
   hasServerDraft: boolean;
+  /**
+   * Overridden by the demo, which keeps everything in the browser and never
+   * touches the database. Defaults to the real server actions.
+   */
+  onSaveDraft?: (payload: {
+    answers: AnswerMap;
+    currentStep: number;
+    clientRevision: number;
+  }) => Promise<{ error?: string; savedAt?: string; revision?: number }>;
+  onSubmit?: (payload: { answers: AnswerMap }) => Promise<
+    { error?: string; fieldErrors?: Record<string, string> } | void
+  >;
+  exitHref?: string;
+  storageKey?: string;
 }) {
   const reduceMotion = useReducedMotion();
 
@@ -134,8 +152,8 @@ export function AssessmentFlow({
   // what the server produced.
   const hydrated = useIsHydrated();
   const localDraft = React.useMemo(
-    () => (hydrated ? readLocalDraft() : null),
-    [hydrated],
+    () => (hydrated ? readLocalDraft(storageKey) : null),
+    [hydrated, storageKey],
   );
   const pendingLocal =
     !localDismissed && localDraft && localDraft.clientRevision > initialRevision
@@ -145,9 +163,9 @@ export function AssessmentFlow({
   React.useEffect(() => {
     // A local copy the server has already caught up with is just clutter.
     if (localDraft && localDraft.clientRevision <= initialRevision && !hasServerDraft) {
-      clearLocalDraft();
+      clearLocalDraft(storageKey);
     }
-  }, [localDraft, initialRevision, hasServerDraft]);
+  }, [localDraft, initialRevision, hasServerDraft, storageKey]);
 
   // ---- Debounced save --------------------------------------------------
   React.useEffect(() => {
@@ -156,7 +174,7 @@ export function AssessmentFlow({
     const revision = revisionRef.current + 1;
     revisionRef.current = revision;
 
-    writeLocalDraft({
+    writeLocalDraft(storageKey, {
       answers,
       currentStep: step,
       clientRevision: revision,
@@ -165,7 +183,7 @@ export function AssessmentFlow({
 
     const timer = setTimeout(async () => {
       try {
-        const result = await saveDraft({
+        const result = await onSaveDraft({
           answers,
           currentStep: step,
           clientRevision: revision,
@@ -178,13 +196,13 @@ export function AssessmentFlow({
     }, 900);
 
     return () => clearTimeout(timer);
-  }, [answers, step]);
+  }, [answers, step, onSaveDraft, storageKey]);
 
   // Retry the moment the connection comes back.
   React.useEffect(() => {
     const onOnline = () => {
       if (saveState !== "offline") return;
-      void saveDraft({
+      void onSaveDraft({
         answers,
         currentStep: step,
         clientRevision: revisionRef.current,
@@ -194,7 +212,7 @@ export function AssessmentFlow({
     };
     window.addEventListener("online", onOnline);
     return () => window.removeEventListener("online", onOnline);
-  }, [saveState, answers, step]);
+  }, [saveState, answers, step, onSaveDraft]);
 
   const update = React.useCallback((id: string, value: AnswerValue) => {
     dirtyRef.current = true;
@@ -240,7 +258,7 @@ export function AssessmentFlow({
 
     setSubmitError(null);
     startSubmit(async () => {
-      const result = await submitAssessment({ answers });
+      const result = await onSubmit({ answers });
       // A successful submit redirects, so reaching here means it failed.
       if (result?.fieldErrors) {
         setErrors(result.fieldErrors);
@@ -251,12 +269,12 @@ export function AssessmentFlow({
       }
       setSubmitError(result?.error ?? "Something went wrong. Please try again.");
     });
-    clearLocalDraft();
+    clearLocalDraft(storageKey);
   };
 
   const saveAndExit = async () => {
     try {
-      await saveDraft({
+      await onSaveDraft({
         answers,
         currentStep: step,
         clientRevision: revisionRef.current + 1,
@@ -296,7 +314,7 @@ export function AssessmentFlow({
                 size="sm"
                 variant="outline"
                 onClick={() => {
-                  clearLocalDraft();
+                  clearLocalDraft(storageKey);
                   setLocalDismissed(true);
                 }}
               >
@@ -406,7 +424,7 @@ export function AssessmentFlow({
             Save and continue later
           </button>
           <Link
-            href="/dashboard"
+            href={exitHref}
             className="rounded text-muted-foreground underline underline-offset-4 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             Exit
@@ -427,18 +445,18 @@ function SaveIndicator({ state }: { state: SaveState }) {
     ),
     saved: (
       <>
-        <Check className="size-3.5 text-score-excellent" /> Saved
+        <Check className="size-3.5 text-score-excellent-ink" /> Saved
       </>
     ),
     offline: (
       <>
-        <CloudOff className="size-3.5 text-score-fair" /> Saved on this device — we
+        <CloudOff className="size-3.5 text-score-fair-ink" /> Saved on this device — we
         will sync when you are back online
       </>
     ),
     error: (
       <>
-        <AlertCircle className="size-3.5 text-destructive" /> Could not save
+        <AlertCircle className="size-3.5 text-destructive-ink" /> Could not save
       </>
     ),
   }[state];

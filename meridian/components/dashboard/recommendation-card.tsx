@@ -5,8 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import type { Recommendation } from "@/lib/scoring";
 
 const PRIORITY_STYLES = {
-  high: "border-destructive/30 bg-destructive/[0.06] text-destructive",
-  medium: "border-score-fair/40 bg-score-fair/10 text-score-needs-improvement",
+  high: "border-destructive/30 bg-destructive/[0.06] text-destructive-ink",
+  medium: "border-score-fair/40 bg-score-fair/10 text-score-needs-improvement-ink",
   low: "border-border bg-muted text-muted-foreground",
 } as const;
 
@@ -52,7 +52,7 @@ export function RecommendationCard({
         </Badge>
         <Badge variant="muted">{PILLAR_LABELS[recommendation.pillar]}</Badge>
         {recommendation.estimatedImpact !== null ? (
-          <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-score-excellent/12 px-2.5 py-0.5 text-xs font-medium text-score-excellent">
+          <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-score-excellent/12 px-2.5 py-0.5 text-xs font-medium text-score-excellent-ink">
             <TrendingUp className="size-3" />
             +{recommendation.estimatedImpact} points
           </span>

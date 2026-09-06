@@ -131,7 +131,7 @@ export default async function HistoryPage() {
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
             {view.milestones.map((milestone) => (
               <li key={milestone.id} className="surface flex gap-3 p-4">
-                <Trophy className="mt-0.5 size-4 shrink-0 text-score-excellent" />
+                <Trophy className="mt-0.5 size-4 shrink-0 text-score-excellent-ink" />
                 <div className="min-w-0">
                   <p className="font-medium">{milestone.title}</p>
                   <p className="mt-0.5 text-sm text-muted-foreground text-pretty">

@@ -66,9 +66,9 @@ export function AssessmentList({
                       className={cn(
                         "mt-1 text-xs tabular",
                         delta > 0
-                          ? "text-score-excellent"
+                          ? "text-score-excellent-ink"
                           : delta < 0
-                            ? "text-destructive"
+                            ? "text-destructive-ink"
                             : "text-muted-foreground",
                       )}
                     >

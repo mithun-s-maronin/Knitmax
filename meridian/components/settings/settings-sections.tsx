@@ -417,7 +417,7 @@ export function DataSettings({ email }: { email: string | null }) {
       </div>
 
       <div className="rounded-xl border border-destructive/30 bg-destructive/[0.04] p-5">
-        <h3 className="flex items-center gap-2 text-sm font-medium text-destructive">
+        <h3 className="flex items-center gap-2 text-sm font-medium text-destructive-ink">
           <TriangleAlert className="size-4" />
           Delete my account
         </h3>

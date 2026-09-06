@@ -8,13 +8,13 @@ const SEVERITY = {
   critical: {
     icon: CircleAlert,
     ring: "border-destructive/30 bg-destructive/[0.06]",
-    tone: "text-destructive",
+    tone: "text-destructive-ink",
     label: "High priority",
   },
   warning: {
     icon: TriangleAlert,
     ring: "border-score-fair/35 bg-score-fair/[0.09]",
-    tone: "text-score-needs-improvement",
+    tone: "text-score-needs-improvement-ink",
     label: "Warning",
   },
   info: {
@@ -26,7 +26,7 @@ const SEVERITY = {
   success: {
     icon: Info,
     ring: "border-score-excellent/25 bg-score-excellent/[0.07]",
-    tone: "text-score-excellent",
+    tone: "text-score-excellent-ink",
     label: "Good news",
   },
 } as const;

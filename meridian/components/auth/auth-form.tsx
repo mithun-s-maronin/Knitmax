@@ -93,7 +93,7 @@ export function AuthForm({
               </p>
             ) : null}
             {error ? (
-              <p id={`${field.name}-error`} className="text-xs text-destructive">
+              <p id={`${field.name}-error`} className="text-xs text-destructive-ink">
                 {error}
               </p>
             ) : null}

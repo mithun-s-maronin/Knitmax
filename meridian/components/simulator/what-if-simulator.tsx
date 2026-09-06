@@ -92,11 +92,14 @@ export function WhatIfSimulator({
   records,
   currency,
   storedScore,
+  allowApply = true,
 }: {
   baseline: ScoringInput;
   records: ScenarioRecords;
   currency: string;
   storedScore: number | null;
+  /** False in the demo, which has no records to write to. */
+  allowApply?: boolean;
 }) {
   const [adjustments, setAdjustments] =
     React.useState<ScenarioAdjustments>(EMPTY_ADJUSTMENTS);
@@ -173,8 +176,8 @@ export function WhatIfSimulator({
                       value === 0
                         ? "text-muted-foreground"
                         : (lever.betterWhen === "up") === value > 0
-                          ? "text-score-excellent"
-                          : "text-destructive",
+                          ? "text-score-excellent-ink"
+                          : "text-destructive-ink",
                     )}
                   >
                     {value > 0 ? "+" : ""}
@@ -204,7 +207,7 @@ export function WhatIfSimulator({
           })}
         </div>
 
-        {touched ? (
+        {touched && allowApply ? (
           <div className="mt-7 border-t pt-5">
             <p className="text-sm font-medium">
               Applying this would change {changes.length}{" "}
@@ -244,6 +247,11 @@ export function WhatIfSimulator({
               Apply these changes
             </Button>
           </div>
+        ) : touched ? (
+          <p className="mt-7 border-t pt-5 text-sm text-muted-foreground text-pretty">
+            In the demo there is nothing to apply this to — with a real account,
+            these changes would be written to your own records.
+          </p>
         ) : null}
       </div>
 
@@ -270,9 +278,9 @@ export function WhatIfSimulator({
             variant="outline"
             className={
               delta > 0
-                ? "border-score-excellent/40 text-score-excellent"
+                ? "border-score-excellent/40 text-score-excellent-ink"
                 : delta < 0
-                  ? "border-destructive/40 text-destructive"
+                  ? "border-destructive/40 text-destructive-ink"
                   : undefined
             }
           >
@@ -302,8 +310,8 @@ export function WhatIfSimulator({
                     pillarDelta === 0
                       ? "text-muted-foreground"
                       : pillarDelta > 0
-                        ? "text-score-excellent"
-                        : "text-destructive",
+                        ? "text-score-excellent-ink"
+                        : "text-destructive-ink",
                   )}
                 >
                   {pillarDelta === 0 ? "—" : `${pillarDelta > 0 ? "+" : ""}${pillarDelta}`}

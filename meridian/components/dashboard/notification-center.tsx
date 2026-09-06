@@ -28,10 +28,10 @@ import {
 import type { NotificationRow } from "@/types/database";
 
 const SEVERITY_ICONS = {
-  critical: { icon: CircleAlert, tone: "text-destructive" },
-  warning: { icon: TriangleAlert, tone: "text-score-needs-improvement" },
+  critical: { icon: CircleAlert, tone: "text-destructive-ink" },
+  warning: { icon: TriangleAlert, tone: "text-score-needs-improvement-ink" },
   info: { icon: Info, tone: "text-primary" },
-  success: { icon: CircleCheck, tone: "text-score-excellent" },
+  success: { icon: CircleCheck, tone: "text-score-excellent-ink" },
 } as const;
 
 /** The bell: deterministic alerts, milestones and reminders (§64). */

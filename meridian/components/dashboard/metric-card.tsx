@@ -52,7 +52,7 @@ export function MetricCard({
             <span
               className={cn(
                 "inline-flex items-center gap-1 font-medium",
-                positive ? "text-score-excellent" : "text-destructive",
+                positive ? "text-score-excellent-ink" : "text-destructive-ink",
               )}
             >
               {delta > 0 ? (

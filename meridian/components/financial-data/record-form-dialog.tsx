@@ -147,7 +147,7 @@ export function RecordFormDialog({
           </div>
 
           {errors.form ? (
-            <p role="alert" className="text-sm text-destructive">
+            <p role="alert" className="text-sm text-destructive-ink">
               {errors.form}
             </p>
           ) : null}
@@ -307,7 +307,7 @@ function FieldControl({
       ) : null}
 
       {error ? (
-        <p id={errorId} className="text-xs text-destructive">
+        <p id={errorId} className="text-xs text-destructive-ink">
           {error}
         </p>
       ) : null}

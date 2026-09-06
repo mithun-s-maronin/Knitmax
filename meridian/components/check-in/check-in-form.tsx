@@ -187,9 +187,9 @@ export function CheckInForm({
           className={cn(
             "mt-2 text-center text-sm font-medium",
             delta > 0
-              ? "text-score-excellent"
+              ? "text-score-excellent-ink"
               : delta < 0
-                ? "text-destructive"
+                ? "text-destructive-ink"
                 : "text-muted-foreground",
           )}
         >
@@ -211,8 +211,8 @@ export function CheckInForm({
                     pillarDelta === 0
                       ? "text-muted-foreground"
                       : pillarDelta > 0
-                        ? "text-score-excellent"
-                        : "text-destructive",
+                        ? "text-score-excellent-ink"
+                        : "text-destructive-ink",
                   )}
                 >
                   {pillarDelta === 0

@@ -54,7 +54,7 @@ export function ImprovementRoadmap({
         </div>
         <Badge
           variant="outline"
-          className="border-score-excellent/40 text-score-excellent"
+          className="border-score-excellent/40 text-score-excellent-ink"
         >
           <TrendingUp className="size-3" />+
           {roadmap.projectedScore - roadmap.currentScore} points
@@ -69,7 +69,7 @@ export function ImprovementRoadmap({
           indicatorClassName="bg-score-excellent"
           aria-label="Projected score"
         />
-        <span className="text-2xl font-semibold tabular text-score-excellent">
+        <span className="text-2xl font-semibold tabular text-score-excellent-ink">
           {roadmap.projectedScore}
         </span>
       </div>
@@ -93,9 +93,9 @@ export function ImprovementRoadmap({
                 <span className="inline-flex items-center gap-1 tabular text-muted-foreground">
                   {step.from}
                   <ArrowRight className="size-3" aria-hidden />
-                  <span className="font-medium text-score-excellent">{step.to}</span>
+                  <span className="font-medium text-score-excellent-ink">{step.to}</span>
                 </span>
-                <span className="text-score-excellent">+{step.gain}</span>
+                <span className="text-score-excellent-ink">+{step.gain}</span>
               </p>
             </div>
           </li>

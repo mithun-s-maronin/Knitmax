@@ -11,11 +11,11 @@ const alertVariants = cva(
         default: "bg-card text-card-foreground",
         info: "border-primary/25 bg-primary/8 text-foreground [&>svg]:text-primary",
         success:
-          "border-score-excellent/30 bg-score-excellent/10 text-foreground [&>svg]:text-score-excellent",
+          "border-score-excellent/30 bg-score-excellent/10 text-foreground [&>svg]:text-score-excellent-ink",
         warning:
-          "border-score-fair/35 bg-score-fair/12 text-foreground [&>svg]:text-score-needs-improvement",
+          "border-score-fair/35 bg-score-fair/12 text-foreground [&>svg]:text-score-needs-improvement-ink",
         destructive:
-          "border-destructive/30 bg-destructive/8 text-foreground [&>svg]:text-destructive",
+          "border-destructive/30 bg-destructive/8 text-foreground [&>svg]:text-destructive-ink",
       },
     },
     defaultVariants: { variant: "default" },

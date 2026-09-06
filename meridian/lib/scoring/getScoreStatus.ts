@@ -7,9 +7,13 @@ import {
 export interface ScoreStatus {
   key: ScoreStatusKey;
   label: string;
-  /** A CSS custom-property name, so charts and text stay on one ramp. */
+  /** The mark colour, for gauges and bars. Not for text. */
   colorVar: string;
-  /** Tailwind text colour utility for the same ramp entry. */
+  /**
+   * The text colour: the ink variant of the same ramp entry, which clears
+   * 4.5:1 against both surfaces. The mark colour only clears 3:1 and must
+   * never be used for type.
+   */
   textClass: string;
   bgClass: string;
   borderClass: string;
@@ -21,31 +25,31 @@ const STATUS_STYLES: Record<
 > = {
   excellent: {
     colorVar: "var(--score-excellent)",
-    textClass: "text-score-excellent",
+    textClass: "text-score-excellent-ink",
     bgClass: "bg-score-excellent/12",
     borderClass: "border-score-excellent/30",
   },
   good: {
     colorVar: "var(--score-good)",
-    textClass: "text-score-good",
+    textClass: "text-score-good-ink",
     bgClass: "bg-score-good/12",
     borderClass: "border-score-good/30",
   },
   fair: {
     colorVar: "var(--score-fair)",
-    textClass: "text-score-fair",
+    textClass: "text-score-fair-ink",
     bgClass: "bg-score-fair/14",
     borderClass: "border-score-fair/35",
   },
   needsImprovement: {
     colorVar: "var(--score-needs-improvement)",
-    textClass: "text-score-needs-improvement",
+    textClass: "text-score-needs-improvement-ink",
     bgClass: "bg-score-needs-improvement/12",
     borderClass: "border-score-needs-improvement/30",
   },
   critical: {
     colorVar: "var(--score-critical)",
-    textClass: "text-score-critical",
+    textClass: "text-score-critical-ink",
     bgClass: "bg-score-critical/12",
     borderClass: "border-score-critical/30",
   },

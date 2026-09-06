@@ -150,9 +150,9 @@ export default async function ResultsPage({
               variant="outline"
               className={
                 delta > 0
-                  ? "border-score-excellent/35 text-score-excellent"
+                  ? "border-score-excellent/35 text-score-excellent-ink"
                   : delta < 0
-                    ? "border-destructive/35 text-destructive"
+                    ? "border-destructive/35 text-destructive-ink"
                     : undefined
               }
             >

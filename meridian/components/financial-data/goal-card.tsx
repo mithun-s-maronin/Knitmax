@@ -79,12 +79,12 @@ export function GoalCard({
           </p>
         </div>
         {progress.isComplete ? (
-          <Badge variant="outline" className="border-score-excellent/40 text-score-excellent">
+          <Badge variant="outline" className="border-score-excellent/40 text-score-excellent-ink">
             <CircleCheck className="size-3" />
             Complete
           </Badge>
         ) : progress.isOverdue ? (
-          <Badge variant="outline" className="border-destructive/40 text-destructive">
+          <Badge variant="outline" className="border-destructive/40 text-destructive-ink">
             <TriangleAlert className="size-3" />
             Past its date
           </Badge>

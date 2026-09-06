@@ -106,9 +106,9 @@ export default async function DashboardPage() {
               variant="outline"
               className={
                 delta > 0
-                  ? "mt-4 border-score-excellent/35 text-score-excellent"
+                  ? "mt-4 border-score-excellent/35 text-score-excellent-ink"
                   : delta < 0
-                    ? "mt-4 border-destructive/35 text-destructive"
+                    ? "mt-4 border-destructive/35 text-destructive-ink"
                     : "mt-4"
               }
             >
@@ -208,7 +208,7 @@ export default async function DashboardPage() {
           {recentMilestone ? (
             <div className="surface p-5">
               <div className="flex items-center gap-2">
-                <Trophy className="size-4 text-score-excellent" />
+                <Trophy className="size-4 text-score-excellent-ink" />
                 <h2 className="font-semibold">Latest milestone</h2>
               </div>
               <p className="mt-3 font-medium">{recentMilestone.title}</p>

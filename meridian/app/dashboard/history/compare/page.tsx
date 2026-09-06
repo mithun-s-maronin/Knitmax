@@ -206,8 +206,8 @@ function MetricRow({
           good === null
             ? "w-6 text-right text-xs text-muted-foreground"
             : good
-              ? "w-6 text-right text-xs text-score-excellent"
-              : "w-6 text-right text-xs text-destructive"
+              ? "w-6 text-right text-xs text-score-excellent-ink"
+              : "w-6 text-right text-xs text-destructive-ink"
         }
         aria-hidden
       >

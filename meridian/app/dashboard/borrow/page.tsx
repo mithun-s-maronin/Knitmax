@@ -82,7 +82,7 @@ export default async function BorrowPage() {
                     {expensive ? (
                       <Badge
                         variant="outline"
-                        className="border-destructive/35 text-destructive"
+                        className="border-destructive/35 text-destructive-ink"
                       >
                         High interest
                       </Badge>

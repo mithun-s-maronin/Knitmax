@@ -23,7 +23,7 @@ export default function DashboardError({
   return (
     <PageShell width="narrow">
       <div className="flex flex-col items-center gap-4 rounded-2xl border border-dashed px-6 py-16 text-center">
-        <div className="rounded-full bg-destructive/10 p-3 text-destructive">
+        <div className="rounded-full bg-destructive/10 p-3 text-destructive-ink">
           <CircleAlert className="size-6" />
         </div>
         <div className="space-y-2">

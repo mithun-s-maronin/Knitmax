@@ -229,7 +229,7 @@ export function QuestionField({
       ) : null}
 
       {error ? (
-        <p id={errorId} className="text-sm text-destructive">
+        <p id={errorId} className="text-sm text-destructive-ink">
           {error}
         </p>
       ) : null}

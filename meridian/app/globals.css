@@ -40,12 +40,29 @@
   --input: oklch(0.906 0.009 255);
   --ring: oklch(0.452 0.128 253);
 
-  /* Score status ramp — critical → excellent. */
+  /*
+   * Score status ramp — critical → excellent.
+   *
+   * Two variants, because the two jobs have different thresholds. The base
+   * colours are marks (gauges, bars, dots) and clear 3:1 against the surface.
+   * The -ink variants are for TEXT. They clear 4.5:1 against the card, the
+   * page ground, AND a tint of their own hue — the last one is the worst case
+   * and the one small chips actually sit on. All checked with a contrast
+   * calculator rather than by eye. Never set a status colour on text without
+   * using the ink variant.
+   */
   --score-critical: oklch(0.585 0.204 25.5);
   --score-needs-improvement: oklch(0.672 0.171 47);
   --score-fair: oklch(0.762 0.148 84);
   --score-good: oklch(0.635 0.117 195);
   --score-excellent: oklch(0.596 0.132 162);
+
+  --score-critical-ink: #c72d31;
+  --score-needs-improvement-ink: #b54800;
+  --score-fair-ink: #936300;
+  --score-good-ink: #007778;
+  --score-excellent-ink: #00794c;
+  --destructive-ink: #cd141b;
 
   /*
    * Pillar identities and the categorical chart ramp.
@@ -115,6 +132,14 @@
   --score-good: oklch(0.732 0.106 196);
   --score-excellent: oklch(0.716 0.128 163);
 
+  /* Re-derived for the dark surface, not lightened copies. */
+  --score-critical-ink: #ff6e68;
+  --score-needs-improvement-ink: #f78445;
+  --score-fair-ink: #d4a22a;
+  --score-good-ink: #36baba;
+  --score-excellent-ink: #43ba88;
+  --destructive-ink: #ff6b5f;
+
   /* Re-stepped for the dark surface and validated again — not a flipped copy. */
   --pillar-spend: #d26aa9;
   --pillar-save: #00a677;
@@ -166,6 +191,13 @@
   --color-score-fair: var(--score-fair);
   --color-score-good: var(--score-good);
   --color-score-excellent: var(--score-excellent);
+
+  --color-destructive-ink: var(--destructive-ink);
+  --color-score-critical-ink: var(--score-critical-ink);
+  --color-score-needs-improvement-ink: var(--score-needs-improvement-ink);
+  --color-score-fair-ink: var(--score-fair-ink);
+  --color-score-good-ink: var(--score-good-ink);
+  --color-score-excellent-ink: var(--score-excellent-ink);
 
   --color-pillar-spend: var(--pillar-spend);
   --color-pillar-save: var(--pillar-save);

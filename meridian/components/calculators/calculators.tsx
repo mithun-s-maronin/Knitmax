@@ -208,6 +208,7 @@ function EmergencyFundCalculator({
           step={1}
           value={[months]}
           onValueChange={([value]) => setMonths(value)}
+          aria-label="Months of cover"
           aria-valuetext={`${months} months`}
         />
       </div>
@@ -394,7 +395,7 @@ function DebtPayoffCalculator({
       result={
         <div className="space-y-5">
           <div>
-            <Badge variant="outline" className="border-score-excellent/40 text-score-excellent">
+            <Badge variant="outline" className="border-score-excellent/40 text-score-excellent-ink">
               Best: {comparison.best === "avalanche" ? "Avalanche" : "Snowball"}
             </Badge>
           </div>
@@ -466,7 +467,7 @@ function DebtPayoffCalculator({
                 </p>
               ) : null}
               {result.neverClears ? (
-                <p className="mt-2 flex gap-1.5 text-xs text-destructive">
+                <p className="mt-2 flex gap-1.5 text-xs text-destructive-ink">
                   <CircleAlert className="mt-0.5 size-3 shrink-0" />
                   At these payments the interest outruns the repayments.
                 </p>

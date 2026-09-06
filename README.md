@@ -14,6 +14,14 @@ fonts/                Manrope (variable, self-hosted)
 PLACEHOLDERS.md       what still needs real content
 ```
 
+
+## Meridian
+
+This repository also contains **Meridian**, an AI-powered financial health
+platform, in `meridian/`. It is a separate Next.js application with its own
+dependencies, database schema and tests, and it does not affect the static site
+above. See [`meridian/README.md`](meridian/README.md).
+
 ## Running it
 
 Any static server:
