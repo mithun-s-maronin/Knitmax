@@ -3,6 +3,15 @@ import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { ThemeToggle } from "@/components/providers/theme-toggle";
 
+/**
+ * Rendered per request. The assessment always reflects the signed-in user's draft.
+ *
+ * Declared rather than inferred: without Supabase configured at build
+ * time the auth check short-circuits before it touches cookies, and Next
+ * would otherwise prerender these as static.
+ */
+export const dynamic = "force-dynamic";
+
 export default function AssessmentLayout({
   children,
 }: {

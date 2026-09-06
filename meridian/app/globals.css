@@ -47,21 +47,29 @@
   --score-good: oklch(0.635 0.117 195);
   --score-excellent: oklch(0.596 0.132 162);
 
-  /* Pillar identities. */
-  --pillar-spend: oklch(0.598 0.145 295);
-  --pillar-save: oklch(0.596 0.132 162);
-  --pillar-borrow: oklch(0.641 0.156 45);
-  --pillar-plan: oklch(0.548 0.135 245);
+  /*
+   * Pillar identities and the categorical chart ramp.
+   *
+   * These are not chosen by eye. Both sets were run through a palette
+   * validator for lightness band, chroma floor, colour-vision-deficiency
+   * separation, normal-vision separation and contrast against the chart
+   * surface — the pillar set under all-pairs (all four appear in one chart),
+   * the eight-slot ramp under adjacent pairs. The light pillar hues are the
+   * Okabe–Ito CVD-safe set. Changing any value means re-running that check.
+   */
+  --pillar-spend: #cc79a7;
+  --pillar-save: #009e73;
+  --pillar-borrow: #d55e00;
+  --pillar-plan: #0072b2;
 
-  /* Categorical series for charts, ordered for adjacent-hue separation. */
-  --chart-1: oklch(0.548 0.135 245);
-  --chart-2: oklch(0.596 0.132 162);
-  --chart-3: oklch(0.641 0.156 45);
-  --chart-4: oklch(0.598 0.145 295);
-  --chart-5: oklch(0.635 0.117 195);
-  --chart-6: oklch(0.702 0.128 108);
-  --chart-7: oklch(0.585 0.164 12);
-  --chart-8: oklch(0.52 0.06 255);
+  --chart-1: #006db8;
+  --chart-2: #00925f;
+  --chart-3: #d45e1c;
+  --chart-4: #805cce;
+  --chart-5: #009899;
+  --chart-6: #c83959;
+  --chart-7: #858100;
+  --chart-8: #9f4a99;
 
   --sidebar: oklch(0.978 0.005 250);
   --sidebar-foreground: oklch(0.246 0.021 255);
@@ -107,19 +115,20 @@
   --score-good: oklch(0.732 0.106 196);
   --score-excellent: oklch(0.716 0.128 163);
 
-  --pillar-spend: oklch(0.712 0.132 296);
-  --pillar-save: oklch(0.716 0.128 163);
-  --pillar-borrow: oklch(0.752 0.142 55);
-  --pillar-plan: oklch(0.706 0.116 246);
+  /* Re-stepped for the dark surface and validated again — not a flipped copy. */
+  --pillar-spend: #d26aa9;
+  --pillar-save: #00a677;
+  --pillar-borrow: #df6e1b;
+  --pillar-plan: #217fd0;
 
-  --chart-1: oklch(0.706 0.116 246);
-  --chart-2: oklch(0.716 0.128 163);
-  --chart-3: oklch(0.752 0.142 55);
-  --chart-4: oklch(0.712 0.132 296);
-  --chart-5: oklch(0.732 0.106 196);
-  --chart-6: oklch(0.796 0.124 110);
-  --chart-7: oklch(0.694 0.152 14);
-  --chart-8: oklch(0.652 0.042 253);
+  --chart-1: #3b93d5;
+  --chart-2: #2ca978;
+  --chart-3: #db703b;
+  --chart-4: #9578de;
+  --chart-5: #12a7a7;
+  --chart-6: #d9566e;
+  --chart-7: #979429;
+  --chart-8: #b761b1;
 
   --sidebar: oklch(0.192 0.018 256);
   --sidebar-foreground: oklch(0.928 0.008 250);

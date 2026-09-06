@@ -4,6 +4,15 @@ import { Logo } from "@/components/brand/logo";
 import { ThemeToggle } from "@/components/providers/theme-toggle";
 import { Button } from "@/components/ui/button";
 
+/**
+ * Rendered per request. Results belong to one user and are never cached across requests.
+ *
+ * Declared rather than inferred: without Supabase configured at build
+ * time the auth check short-circuits before it touches cookies, and Next
+ * would otherwise prerender these as static.
+ */
+export const dynamic = "force-dynamic";
+
 export default function ResultsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col">

@@ -8,6 +8,15 @@ import { requireSessionContext } from "@/lib/auth";
 
 export const metadata: Metadata = { title: "Welcome" };
 
+/**
+ * Rendered per request. Onboarding state is per user.
+ *
+ * Declared rather than inferred: without Supabase configured at build
+ * time the auth check short-circuits before it touches cookies, and Next
+ * would otherwise prerender these as static.
+ */
+export const dynamic = "force-dynamic";
+
 export default async function OnboardingPage() {
   const { profile, settings } = await requireSessionContext("/onboarding");
 
