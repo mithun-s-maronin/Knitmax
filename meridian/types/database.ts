@@ -144,7 +144,7 @@ export type Json = string | number | boolean | null | { [k: string]: Json } | Js
 // Row shapes
 // ---------------------------------------------------------------------------
 
-export interface ProfileRow {
+export type ProfileRow = {
   id: string;
   full_name: string | null;
   email: string | null;
@@ -155,7 +155,7 @@ export interface ProfileRow {
   updated_at: string;
 }
 
-export interface FinancialProfileRow {
+export type FinancialProfileRow = {
   id: string;
   user_id: string;
   employment_status: EmploymentStatus | null;
@@ -166,7 +166,7 @@ export interface FinancialProfileRow {
   updated_at: string;
 }
 
-export interface UserSettingsRow {
+export type UserSettingsRow = {
   user_id: string;
   theme: ThemePreference;
   ai_data_permission: boolean;
@@ -180,7 +180,7 @@ export interface UserSettingsRow {
   updated_at: string;
 }
 
-export interface IncomeSourceRow {
+export type IncomeSourceRow = {
   id: string;
   user_id: string;
   name: string;
@@ -193,7 +193,7 @@ export interface IncomeSourceRow {
   updated_at: string;
 }
 
-export interface ExpenseRow {
+export type ExpenseRow = {
   id: string;
   user_id: string;
   category: ExpenseCategory;
@@ -207,7 +207,7 @@ export interface ExpenseRow {
   updated_at: string;
 }
 
-export interface SavingsAccountRow {
+export type SavingsAccountRow = {
   id: string;
   user_id: string;
   name: string;
@@ -221,7 +221,7 @@ export interface SavingsAccountRow {
   updated_at: string;
 }
 
-export interface DebtRow {
+export type DebtRow = {
   id: string;
   user_id: string;
   name: string;
@@ -238,7 +238,7 @@ export interface DebtRow {
   updated_at: string;
 }
 
-export interface FinancialGoalRow {
+export type FinancialGoalRow = {
   id: string;
   user_id: string;
   name: string;
@@ -254,7 +254,7 @@ export interface FinancialGoalRow {
   updated_at: string;
 }
 
-export interface AssetRow {
+export type AssetRow = {
   id: string;
   user_id: string;
   name: string;
@@ -265,7 +265,7 @@ export interface AssetRow {
   updated_at: string;
 }
 
-export interface LiabilityRow {
+export type LiabilityRow = {
   id: string;
   user_id: string;
   name: string;
@@ -276,7 +276,7 @@ export interface LiabilityRow {
   updated_at: string;
 }
 
-export interface NetWorthSnapshotRow {
+export type NetWorthSnapshotRow = {
   id: string;
   user_id: string;
   total_assets: number;
@@ -285,7 +285,7 @@ export interface NetWorthSnapshotRow {
   recorded_at: string;
 }
 
-export interface AssessmentRow {
+export type AssessmentRow = {
   id: string;
   user_id: string;
   completed_at: string;
@@ -303,7 +303,7 @@ export interface AssessmentRow {
   created_at: string;
 }
 
-export interface AssessmentAnswerRow {
+export type AssessmentAnswerRow = {
   id: string;
   assessment_id: string;
   user_id: string;
@@ -315,7 +315,7 @@ export interface AssessmentAnswerRow {
   created_at: string;
 }
 
-export interface ScoreHistoryRow {
+export type ScoreHistoryRow = {
   id: string;
   user_id: string;
   assessment_id: string;
@@ -327,7 +327,7 @@ export interface ScoreHistoryRow {
   recorded_at: string;
 }
 
-export interface AssessmentDraftRow {
+export type AssessmentDraftRow = {
   user_id: string;
   assessment_version: string;
   answers: Json;
@@ -337,7 +337,7 @@ export interface AssessmentDraftRow {
   updated_at: string;
 }
 
-export interface ActionPlanRow {
+export type ActionPlanRow = {
   id: string;
   user_id: string;
   assessment_id: string | null;
@@ -355,7 +355,7 @@ export interface ActionPlanRow {
   completed_at: string | null;
 }
 
-export interface AiConversationRow {
+export type AiConversationRow = {
   id: string;
   user_id: string;
   title: string;
@@ -363,7 +363,7 @@ export interface AiConversationRow {
   updated_at: string;
 }
 
-export interface AiMessageRow {
+export type AiMessageRow = {
   id: string;
   conversation_id: string;
   user_id: string;
@@ -373,7 +373,7 @@ export interface AiMessageRow {
   created_at: string;
 }
 
-export interface NotificationRow {
+export type NotificationRow = {
   id: string;
   user_id: string;
   type: NotificationType;
@@ -386,7 +386,7 @@ export interface NotificationRow {
   created_at: string;
 }
 
-export interface MilestoneRow {
+export type MilestoneRow = {
   id: string;
   user_id: string;
   key: string;
@@ -395,7 +395,7 @@ export interface MilestoneRow {
   achieved_at: string;
 }
 
-export interface CheckInRow {
+export type CheckInRow = {
   id: string;
   user_id: string;
   period: string;
@@ -405,7 +405,7 @@ export interface CheckInRow {
   created_at: string;
 }
 
-export interface SimulationRow {
+export type SimulationRow = {
   id: string;
   user_id: string;
   name: string;
@@ -534,8 +534,8 @@ export interface Database {
         Managed | "name" | "adjustments" | "baseline_scores" | "projected_scores" | "applied_at"
       >;
     };
-    Views: Record<never, never>;
-    Functions: Record<never, never>;
+    Views: { [_ in never]: never };
+    Functions: { [_ in never]: never };
     Enums: {
       meridian_frequency: Frequency;
       meridian_employment_status: EmploymentStatus;
@@ -558,7 +558,7 @@ export interface Database {
       meridian_notification_type: NotificationType;
       meridian_severity: Severity;
     };
-    CompositeTypes: Record<never, never>;
+    CompositeTypes: { [_ in never]: never };
   };
 }
 

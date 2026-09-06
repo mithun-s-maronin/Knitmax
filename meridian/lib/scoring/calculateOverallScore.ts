@@ -1,6 +1,5 @@
 import { divideOrNull, round, roundScore } from "./helpers";
 import { PILLAR_WEIGHTS, SCORING_VERSION, THRESHOLDS } from "./scoreConfig";
-import { getScoreStatus } from "./getScoreStatus";
 import { calculateSpendScore } from "./calculateSpendScore";
 import { calculateSaveScore } from "./calculateSaveScore";
 import { calculateBorrowScore } from "./calculateBorrowScore";

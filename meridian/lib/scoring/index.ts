@@ -44,6 +44,7 @@ export {
 } from "./calculatePlanScore";
 export { calculateOverallScore, deriveMetrics, computeCore } from "./calculateOverallScore";
 export { generateRecommendations, generateAlerts, generateInsights } from "./generateInsights";
+export { readStoredResult, type StoredAssessmentResult } from "./fromStored";
 export type { CoreResult };
 
 /** A neutral input, so callers can build one field at a time. */
