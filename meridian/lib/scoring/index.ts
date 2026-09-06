@@ -6,9 +6,8 @@
  * the assessment, the live dashboard, the what-if simulator and the tests all
  * run the identical code and get comparable numbers (§29, §59, §90).
  *
- * The engine is authoritative. The AI assistant may explain and interpret what
- * comes out of here, but every official number a user sees originates in this
- * file's call graph (§27).
+ * The engine is authoritative: every official number a user sees originates in
+ * this file's call graph (§27).
  */
 
 import { computeCore, type CoreResult } from "./calculateOverallScore";

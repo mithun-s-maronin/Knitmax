@@ -338,7 +338,7 @@ export function generateRecommendations(
  * Deterministic alerts (§35, §73).
  *
  * These are computed from the numbers, not written by a model, so the
- * important warnings still appear when the AI assistant is unavailable or
+ * important warnings still appear regardless of what else on the page is
  * switched off.
  */
 export function generateAlerts(core: CoreResult): Alert[] {

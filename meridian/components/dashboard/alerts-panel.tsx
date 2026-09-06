@@ -35,8 +35,7 @@ const SEVERITY = {
  * The deterministic alerts (§35).
  *
  * These come from the scoring engine's own thresholds, not from a model, so
- * the important warnings are present whether or not the AI assistant is
- * available or switched on.
+ * the important warnings are present on every profile, unconditionally.
  */
 export function AlertsPanel({
   alerts,
